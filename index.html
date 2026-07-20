@@ -227,7 +227,8 @@
             transition: var(--transition);
             user-select: none;
             width: 100%;
-            justify-content: space-between;
+            /* изменено: вместо space-between используем flex-start */
+            justify-content: flex-start;
             box-shadow: var(--shadow);
         }
         .filters-toggle:active { transform: scale(0.98); }
@@ -245,6 +246,8 @@
             font-weight: 600;
             line-height: 20px;
             flex-shrink: 0;
+            /* добавляем margin-left: auto, чтобы элемент прижимался к правому краю */
+            margin-left: auto;
         }
         .filters-toggle .filter-summary {
             font-size: 12px;
@@ -253,8 +256,8 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            flex: 1;
-            margin: 0 8px;
+            flex: 1;  /* занимает оставшееся пространство */
+            min-width: 0;
         }
         .filters {
             display: none;
