@@ -1613,6 +1613,7 @@
             .compare-checkbox {
                 bottom: 14px;
                 right: 14px;
+                position: absolute;
             }
             .detail-overlay {
                 align-items: center;
@@ -1732,7 +1733,6 @@
             .compare-checkbox[data-tooltip]:hover::after {
                 content: attr(data-tooltip);
                 position: absolute;
-                /* Показываем подсказку НАД кнопкой */
                 bottom: 100%;
                 left: 50%;
                 transform: translateX(-50%);
@@ -1746,7 +1746,7 @@
                 font-weight: 400;
                 backdrop-filter: blur(4px);
                 z-index: 10;
-                margin-bottom: 8px; /* отступ от кнопки */
+                margin-bottom: 8px;
             }
             /* убираем синюю рамку при наведении на кнопку сравнения */
             .compare-checkbox:focus-visible {
@@ -3098,7 +3098,6 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 60 дней без визы' },
                     checklist: [
                         { icon: '☀️', text: 'Солнцезащитный крем SPF 50+', detail: 'Обязательно' },
-                        { icon: '🔌', text: 'Переходник для розеток', detail: 'Тип C/F' },
                         { icon: '💊', text: 'Аптечка', detail: 'От желудка и аллергии' },
                         { icon: '🧴', text: 'Средство от комаров', detail: 'Вечером активны' }
                     ]
@@ -3204,7 +3203,6 @@
                     checklist: [
                         { icon: '👗', text: 'Вечерняя одежда', detail: 'Для ресторанов' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '💳', text: 'Карта без комиссии', detail: 'Евро' }
                     ]
                 },
@@ -3219,7 +3217,6 @@
                     checklist: [
                         { icon: '👗', text: 'Скромная одежда для Ватикана', detail: 'Закрытые плечи и колени' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F/L' },
                         { icon: '💳', text: 'Карта без комиссии', detail: 'Евро' }
                     ]
                 },
@@ -3234,8 +3231,7 @@
                     checklist: [
                         { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для Акрополя' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для Акрополя' }
                     ]
                 },
                 'Португалия': {
@@ -3249,7 +3245,6 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок по Лиссабону' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '🧥', text: 'Лёгкая куртка', detail: 'Вечером может быть прохладно' }
                     ]
                 },
@@ -3264,7 +3259,6 @@
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Даже летом может быть холодно' },
                         { icon: '👟', text: 'Треккинговые ботинки', detail: 'Для прогулок в горах' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/J' },
                         { icon: '💳', text: 'Карта без комиссии', detail: 'Швейцарские франки' }
                     ]
                 },
@@ -3279,7 +3273,6 @@
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок по Праге' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/E' },
                         { icon: '💳', text: 'Карта', detail: 'Кроны' }
                     ]
                 },
@@ -3293,7 +3286,6 @@
                     visa: { difficulty: 'hard', time: '30-45', notes: 'Сложная, нужен пригласительный' },
                     checklist: [
                         { icon: '📄', text: 'Все документы на визу', detail: 'Заранее' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/B' },
                         { icon: '💳', text: 'Карта и наличные', detail: 'Много наличных' },
                         { icon: '📱', text: 'Мобильный интернет', detail: 'Pocket WiFi' }
                     ]
@@ -3308,7 +3300,6 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'K-ETA, до 90 дней' },
                     checklist: [
                         { icon: '📄', text: 'K-ETA', detail: 'Оформить онлайн' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '💳', text: 'Карта', detail: 'Вона' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' }
                     ]
@@ -3324,8 +3315,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' }
                     ]
                 },
                 'Сингапур': {
@@ -3339,7 +3329,6 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '👔', text: 'Деловая одежда', detail: 'Для ресторанов' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' },
                         { icon: '💳', text: 'Карта', detail: 'Сингапурские доллары' }
                     ]
                 },
@@ -3354,8 +3343,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '🧥', text: 'Лёгкая ветровка', detail: 'Для чайных плантаций' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип D/G' }
+                        { icon: '🧥', text: 'Лёгкая ветровка', detail: 'Для чайных плантаций' }
                     ]
                 },
                 'Саудовская Аравия': {
@@ -3369,8 +3357,7 @@
                     checklist: [
                         { icon: '👕', text: 'Скромная одежда', detail: 'Закрытая обязательна' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '💧', text: 'Бутылка для воды', detail: 'Пить не менее 3л в день' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' }
+                        { icon: '💧', text: 'Бутылка для воды', detail: 'Пить не менее 3л в день' }
                     ]
                 },
                 'Узбекистан': {
@@ -3384,8 +3371,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🧣', text: 'Платок', detail: 'Для посещения мечетей' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок по Самарканду' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок по Самарканду' }
                     ]
                 },
                 'Россия (Сочи)': {
@@ -3414,8 +3400,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' }
                     ]
                 },
                 'Индия (Гоа)': {
@@ -3429,8 +3414,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '💊', text: 'Аптечка', detail: 'От желудка' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/D' }
+                        { icon: '💊', text: 'Аптечка', detail: 'От желудка' }
                     ]
                 },
                 'Китай': {
@@ -3444,7 +3428,6 @@
                     checklist: [
                         { icon: '📱', text: 'WeChat', detail: 'Без него никуда' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/C/I' },
                         { icon: '💊', text: 'Аптечка', detail: 'От желудка' }
                     ]
                 },
@@ -3459,7 +3442,6 @@
                     checklist: [
                         { icon: '👗', text: 'Элегантная одежда', detail: 'Для ресторанов' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/E' },
                         { icon: '💳', text: 'Карта без комиссии', detail: 'Евро' }
                     ]
                 },
@@ -3474,7 +3456,6 @@
                     checklist: [
                         { icon: '🌂', text: 'Зонт', detail: 'Всегда берите!' },
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Даже летом' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' },
                         { icon: '💳', text: 'Карта', detail: 'Фунты' }
                     ]
                 },
@@ -3489,7 +3470,6 @@
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '💳', text: 'Карта', detail: 'Евро' }
                     ]
                 },
@@ -3504,8 +3484,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/C/G' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' }
                     ]
                 },
                 'Филиппины': {
@@ -3519,8 +3498,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/B/C' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' }
                     ]
                 },
                 'Катар': {
@@ -3534,8 +3512,7 @@
                     checklist: [
                         { icon: '👕', text: 'Скромная одежда', detail: 'Закрытая' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '💧', text: 'Бутылка для воды', detail: 'Пить не менее 3л в день' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' }
+                        { icon: '💧', text: 'Бутылка для воды', detail: 'Пить не менее 3л в день' }
                     ]
                 },
                 'Оман': {
@@ -3549,7 +3526,6 @@
                     checklist: [
                         { icon: '👕', text: 'Скромная одежда', detail: 'Закрытая' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' },
                         { icon: '💧', text: 'Бутылка для воды', detail: 'Очень жарко' }
                     ]
                 },
@@ -3564,8 +3540,7 @@
                     checklist: [
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для Петры' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '🧣', text: 'Платок', detail: 'Для мечетей' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/D/G' }
+                        { icon: '🧣', text: 'Платок', detail: 'Для мечетей' }
                     ]
                 },
                 'Марокко': {
@@ -3579,7 +3554,6 @@
                     checklist: [
                         { icon: '🛍️', text: 'Торгуйтесь на рынках', detail: 'Это часть культуры' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/E' },
                         { icon: '🧣', text: 'Платок', detail: 'Для мечетей' }
                     ]
                 },
@@ -3594,7 +3568,6 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
                         { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/E' },
                         { icon: '🧣', text: 'Платок', detail: 'Для мечетей' }
                     ]
                 },
@@ -3609,8 +3582,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '💊', text: 'Аптечка', detail: 'От желудка' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/B' }
+                        { icon: '💊', text: 'Аптечка', detail: 'От желудка' }
                     ]
                 },
                 'Куба': {
@@ -3624,8 +3596,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/B/C' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' }
                     ]
                 },
                 'Доминикана': {
@@ -3639,8 +3610,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
                         { icon: '🦟', text: 'Средство от комаров', detail: 'Обязательно' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/B' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Хлопок' }
                     ]
                 },
                 'Казахстан': {
@@ -3654,7 +3624,6 @@
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' }
                     ]
                 },
@@ -3683,7 +3652,6 @@
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '💳', text: 'Карта', detail: 'Евро' }
                     ]
                 },
@@ -3698,7 +3666,6 @@
                     checklist: [
                         { icon: '🌂', text: 'Зонт', detail: 'Всегда берите!' },
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Даже летом' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/E' },
                         { icon: '💳', text: 'Карта', detail: 'Евро' }
                     ]
                 },
@@ -3713,8 +3680,7 @@
                     checklist: [
                         { icon: '👕', text: 'Лёгкая одежда', detail: 'Для пляжа' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' }
                     ]
                 },
                 'Канада': {
@@ -3728,7 +3694,6 @@
                     checklist: [
                         { icon: '🧥', text: 'Очень тёплая одежда', detail: 'Зимой сурово' },
                         { icon: '👟', text: 'Треккинговые ботинки', detail: 'Для природы' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип A/B' },
                         { icon: '💳', text: 'Карта', detail: 'Канадские доллары' }
                     ]
                 },
@@ -3743,8 +3708,7 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+ обязательно' },
                         { icon: '🕶️', text: 'Солнечные очки', detail: 'Защита UV 400' },
-                        { icon: '👒', text: 'Шляпа', detail: 'От солнца' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип I' }
+                        { icon: '👒', text: 'Шляпа', detail: 'От солнца' }
                     ]
                 },
                 'Новая Зеландия': {
@@ -3758,8 +3722,7 @@
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Даже летом' },
                         { icon: '👟', text: 'Треккинговые ботинки', detail: 'Для природы' },
-                        { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип I' }
+                        { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' }
                     ]
                 },
                 'Сейшелы': {
@@ -3773,8 +3736,7 @@
                     checklist: [
                         { icon: '🤿', text: 'Маска и трубка', detail: 'Для снорклинга' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Пляжная' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Пляжная' }
                     ]
                 },
                 'Маврикий': {
@@ -3788,8 +3750,7 @@
                     checklist: [
                         { icon: '🤿', text: 'Маска и трубка', detail: 'Для снорклинга' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Пляжная' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/G' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Пляжная' }
                     ]
                 },
                 'Кипр': {
@@ -3803,7 +3764,6 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
                         { icon: '👕', text: 'Лёгкая одежда', detail: 'Для пляжа' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип G' },
                         { icon: '💳', text: 'Карта', detail: 'Евро' }
                     ]
                 },
@@ -3818,7 +3778,6 @@
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
                         { icon: '👕', text: 'Лёгкая одежда', detail: 'Для пляжа' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' }
                     ]
                 },
@@ -3833,7 +3792,6 @@
                     checklist: [
                         { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' },
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' }
                     ]
                 },
@@ -3861,8 +3819,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 30 дней без визы' },
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' }
                     ]
                 },
                 'Кыргызстан': {
@@ -3875,8 +3832,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 60 дней без визы' },
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' }
                     ]
                 },
                 'Таджикистан': {
@@ -3889,8 +3845,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 30 дней без визы' },
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' }
                     ]
                 },
                 'Туркменистан': {
@@ -3903,8 +3858,7 @@
                     visa: { difficulty: 'hard', time: '30-45', notes: 'сложная виза' },
                     checklist: [
                         { icon: '📄', text: 'Все документы на визу', detail: 'Заранее' },
-                        { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 50+' }
                     ]
                 },
                 'Армения': {
@@ -3917,8 +3871,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 180 дней без визы' },
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '🧥', text: 'Тёплая одежда', detail: 'Для гор' }
                     ]
                 },
                 'Азербайджан': {
@@ -3931,8 +3884,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 90 дней без визы' },
                     checklist: [
                         { icon: '🧴', text: 'Солнцезащитный крем', detail: 'SPF 30+' },
-                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Летом жарко' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👕', text: 'Лёгкая одежда', detail: 'Летом жарко' }
                     ]
                 },
                 'Молдова': {
@@ -3945,8 +3897,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 90 дней без визы' },
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' }
                     ]
                 },
                 'Украина': {
@@ -3959,8 +3910,7 @@
                     visa: { difficulty: 'easy', time: '0', notes: 'до 90 дней без визы' },
                     checklist: [
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' },
-                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' },
-                        { icon: '🔌', text: 'Переходник', detail: 'Тип C/F' }
+                        { icon: '👟', text: 'Удобная обувь', detail: 'Для прогулок' }
                     ]
                 }
             };
@@ -3984,6 +3934,18 @@
                         { icon: '🔌', text: 'Переходник', detail: 'Уточните тип' }
                     ]
                 };
+            }
+
+            // Функция фильтрации чеклиста – убираем пункты про переходник, если есть C или F
+            function filterChecklist(checklist, plugType) {
+                if (!checklist) return checklist;
+                const hasCF = plugType.includes('C') || plugType.includes('F');
+                if (!hasCF) return checklist;
+                return checklist.filter(item => {
+                    const text = (item.text || '').toLowerCase();
+                    const detail = (item.detail || '').toLowerCase();
+                    return !text.includes('переходник') && !detail.includes('переходник');
+                });
             }
 
             // ===== КУРСЫ ВАЛЮТ (АКТУАЛЬНЫЕ) =====
@@ -4380,7 +4342,6 @@
             // Следим за системной темой (если пользователь не переопределял)
             const systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
             systemThemeMedia.addEventListener('change', (e) => {
-                // Если нет сохранённого предпочтения — обновляем тему
                 if (localStorage.getItem('theme') === null) {
                     applyTheme(e.matches);
                 }
@@ -4459,7 +4420,6 @@
                 toggleIcon.classList.toggle('open', filtersOpen);
             });
 
-            // Закрытие фильтров при клике вне их области
             document.addEventListener('click', (e) => {
                 const wrapper = document.querySelector('.filters-wrapper');
                 if (wrapper && !wrapper.contains(e.target) && filtersOpen) {
@@ -4620,7 +4580,6 @@
                 const idx = compareList.indexOf(id);
                 if (idx > -1) compareList.splice(idx, 1);
                 else {
-                    // Ограничиваем до 4 стран
                     if (compareList.length >= 4) compareList.shift();
                     compareList.push(id);
                 }
@@ -4658,7 +4617,8 @@
                     addCompareBtn.classList.toggle('added', isSelected);
                 }
                 if (compareFromDetailBtn) {
-                    compareFromDetailBtn.classList.toggle('visible', compareList.length === 2);
+                    // Показываем кнопку, если выбрано 2 или более стран
+                    compareFromDetailBtn.classList.toggle('visible', compareList.length >= 2);
                 }
             }
 
@@ -4690,10 +4650,13 @@
                     hard: { label: '🔴 Сложная', class: 'hard' }
                 };
                 const visaDiff = visaDifficultyMap[visaData.difficulty] || visaDifficultyMap.medium;
-                const checklist = extras.checklist || [
+
+                // Фильтруем чек-лист – убираем переходник, если есть C или F
+                let checklist = extras.checklist || [
                     { icon: '📄', text: 'Проверьте документы', detail: 'Заранее' },
                     { icon: '💊', text: 'Аптечка', detail: 'С собой' }
                 ];
+                checklist = filterChecklist(checklist, c.plug);
 
                 const budget = calculateBudget(c, budgetDays, budgetPeople);
                 const budgetTotal = budget.total || 0;
@@ -4813,7 +4776,6 @@
                 const heroColor = c.color;
                 const heroColorDark = c.color + '99';
 
-                // Для десктопа используем 3 колонки
                 const isDesktop = window.innerWidth >= 768;
 
                 let detailHTML = `
@@ -4835,7 +4797,6 @@
                 `;
 
                 if (isDesktop) {
-                    // 3 колонки для десктопа
                     detailHTML += `
                         <div class="col-1">
                             <div class="detail-block">
@@ -4901,7 +4862,6 @@
                         </div>
                     `;
                 } else {
-                    // Мобильная версия (одна колонка)
                     detailHTML += `
                         <div class="detail-block">
                             <div class="row"><span class="label">${seasonLabel}</span><span class="value"><span class="season-tag ${season}">${seasonLabels[season]}</span></span></div>
@@ -5023,7 +4983,6 @@
                 document.body.style.overflow = '';
             }
 
-            // Закрытие по Escape
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     if (overlay && overlay.classList.contains('active')) closeDetail();
@@ -5038,7 +4997,7 @@
                     toggleCompare(currentDetailId); });
             }
             if (compareFromDetailBtn) {
-                compareFromDetailBtn.addEventListener('click', () => { if (compareList.length === 2) { openCompare(); } });
+                compareFromDetailBtn.addEventListener('click', () => { if (compareList.length >= 2) { openCompare(); } });
             }
 
             // ===== КНОПКА ОЧИСТКИ ПОИСКА =====
@@ -5179,7 +5138,6 @@
 
             init();
 
-            // Обработчик изменения размера окна для перерисовки модалки при смене разрешения
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
