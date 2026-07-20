@@ -1613,7 +1613,7 @@
             .compare-checkbox {
                 bottom: 14px;
                 right: 14px;
-                position: absolute;
+                position: absolute; /* чтобы псевдоэлемент позиционировался относительно кнопки */
             }
             .detail-overlay {
                 align-items: center;
@@ -4981,6 +4981,8 @@
             function closeDetail() {
                 if (overlay) overlay.classList.remove('active');
                 document.body.style.overflow = '';
+                // Сбрасываем currentDetailId, чтобы при resize не открывалось заново
+                currentDetailId = null;
             }
 
             document.addEventListener('keydown', (e) => {
@@ -5129,7 +5131,8 @@
 
                 setInterval(async () => {
                     await fetchCurrencyRates();
-                    if (currentDetailId) {
+                    if (currentDetailId && overlay && overlay.classList.contains('active')) {
+                        // Обновляем только если детали открыты
                         openDetail(currentDetailId);
                     }
                     render(parseInt(monthSelect.value));
@@ -5142,7 +5145,8 @@
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    if (currentDetailId) {
+                    // Открываем детали только если они активны и есть currentDetailId
+                    if (currentDetailId && overlay && overlay.classList.contains('active')) {
                         openDetail(currentDetailId);
                     }
                 }, 300);
