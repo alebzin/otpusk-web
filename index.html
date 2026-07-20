@@ -384,6 +384,19 @@
             border-color: var(--accent);
             background: var(--accent-light);
         }
+        /* --- ПАРАЛЛАКС ФЛАГА --- */
+        .country-card .flag {
+            transition: transform 0.3s ease, filter 0.3s ease;
+            will-change: transform;
+        }
+        .country-card:hover .flag {
+            transform: translateY(-4px) scale(1.05);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+        [data-theme="dark"] .country-card:hover .flag {
+            filter: drop-shadow(0 4px 8px rgba(255,255,255,0.1));
+        }
+
         .country-card:nth-child(1) { animation-delay: 0.01s; }
         .country-card:nth-child(2) { animation-delay: 0.02s; }
         .country-card:nth-child(3) { animation-delay: 0.03s; }
@@ -497,11 +510,17 @@
         }
         .card-weather .comfort-badge.perfect { background: #d4edda; color: #155724; }
         .card-weather .comfort-badge.good { background: #fff3cd; color: #856404; }
-        .card-weather .comfort-badge.ok { background: #ffeaa7; color: #6c5200; }
+        .card-weather .comfort-badge.ok {
+            background: #f0c27a;
+            color: #2d1b00;
+        }
         .card-weather .comfort-badge.bad { background: #f8d7da; color: #721c24; }
         [data-theme="dark"] .card-weather .comfort-badge.perfect { background: #1a3a2a; color: #8fdfb0; }
         [data-theme="dark"] .card-weather .comfort-badge.good { background: #3a3a1a; color: #e8d060; }
-        [data-theme="dark"] .card-weather .comfort-badge.ok { background: #4a3a1a; color: #f0d070; }
+        [data-theme="dark"] .card-weather .comfort-badge.ok {
+            background: #5a4a2a;
+            color: #f5e6b0;
+        }
         [data-theme="dark"] .card-weather .comfort-badge.bad { background: #3a1a1a; color: #df8f8f; }
         .compare-checkbox {
             position: absolute;
@@ -1343,6 +1362,23 @@
             margin-top: 4px;
             opacity: 0.7;
         }
+        .empty-state .reset-empty-btn {
+            margin-top: 16px;
+            padding: 8px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .empty-state .reset-empty-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        .empty-state .reset-empty-btn:active { transform: scale(0.95); }
         .visa-difficulty {
             display: inline-block;
             padding: 2px 10px;
@@ -4556,8 +4592,28 @@
                 if (countBadge) countBadge.textContent = sorted.length;
 
                 if (sorted.length === 0) {
-                    if (grid) grid.innerHTML =
-                        `<div class="empty-state">😕 Ничего не найдено<br><span>Попробуйте изменить фильтры</span></div>`;
+                    if (grid) {
+                        grid.innerHTML = `
+                            <div class="empty-state">
+                                😕 Ничего не найдено
+                                <span>Попробуйте изменить фильтры</span>
+                                <button class="reset-empty-btn" id="resetEmptyBtn">⟲ Сбросить фильтры</button>
+                            </div>
+                        `;
+                        const resetBtn = document.getElementById('resetEmptyBtn');
+                        if (resetBtn) {
+                            resetBtn.addEventListener('click', () => {
+                                // Сброс фильтров
+                                document.querySelectorAll('#filtersContainer .filter-options label').forEach(label => {
+                                    label.classList.remove('active');
+                                });
+                                searchInput.value = '';
+                                searchClearBtn.classList.remove('visible');
+                                updateFilterSummary();
+                                render(parseInt(monthSelect.value));
+                            });
+                        }
+                    }
                     return;
                 }
 
@@ -4745,6 +4801,22 @@
 
                 const rainDisplay = c.rainSeason === '–' || c.rainSeason === 'Нет' ? 'Нет' : c.rainSeason;
 
+                // ---- Информация о стране ----
+                const rate = getCurrencyRate(c.currency);
+                let updateTimeStr = '';
+                if (lastUpdateTime > 0) {
+                    const date = new Date(lastUpdateTime);
+                    updateTimeStr = 'обновлено ' + date.toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } else {
+                    updateTimeStr = 'обновлено неизвестно';
+                }
+                const currencyDisplay = `${c.currency} (${rate} ₽) · ${updateTimeStr}`;
+
                 const infoItems = [
                     { label: 'Язык', value: c.language || '—' },
                     { label: 'Прививки', value: c.vaccines || '—' },
@@ -4752,7 +4824,7 @@
                     { label: 'Шопинг', value: c.shopping || '—' },
                     { label: 'Кухня', value: c.cuisine || '—' },
                     { label: 'Климат', value: c.humidity || '—' },
-                    { label: 'Валюта', value: `${c.currency} (${getCurrencyRate(c.currency)} ₽)` },
+                    { label: 'Валюта', value: currencyDisplay },
                     { label: 'Розетки', value: plugTagsHtml, isHtml: true }
                 ];
 
@@ -4904,7 +4976,7 @@
                                     <span class="budget-label">💎 Итого</span>
                                     <span class="budget-total">${budgetTotal.toLocaleString()} ₽</span>
                                 </div>
-                                <div class="budget-note">Расчёт примерный</div>
+                                <div class="budget-note">Расчёт примерный, включает перелёт на 2 человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на 2 человек.</div>
                                 <div class="trip-partner">
                                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                                         <span style="font-size:18px;">✈️</span>
@@ -5016,16 +5088,21 @@
                     });
                 }
 
+                // ===== УПРАВЛЕНИЕ СКРОЛЛОМ =====
                 if (detailCard) {
-                    detailCard.scrollTop = 0;
-                    requestAnimationFrame(() => {
-                        if (detailCard) {
-                            detailCard.scrollTop = 0;
-                            setTimeout(() => {
-                                if (detailCard) detailCard.scrollTop = 0;
-                            }, 50);
-                        }
-                    });
+                    // Если модалка уже открыта (overlay активен), не сбрасываем скролл
+                    if (!overlay.classList.contains('active')) {
+                        // Первое открытие — скролл вверх
+                        detailCard.scrollTop = 0;
+                        requestAnimationFrame(() => {
+                            if (detailCard) {
+                                detailCard.scrollTop = 0;
+                                setTimeout(() => {
+                                    if (detailCard) detailCard.scrollTop = 0;
+                                }, 50);
+                            }
+                        });
+                    }
                 }
 
                 updateDetailButtons();
@@ -5076,13 +5153,12 @@
                 const scrollHeight = scrollEl.scrollHeight;
                 const clientHeight = scrollEl.clientHeight;
 
-                // Свайп вниз (палец движется вниз, deltaY > 0) и достигнут верх
-                if (touchDeltaY > 50 && scrollTop === 0) {
+                // Увеличиваем порог с 50 до 80 для менее чувствительного закрытия
+                if (touchDeltaY > 80 && scrollTop === 0) {
                     closeDetail();
                     return;
                 }
-                // Свайп вверх (палец движется вверх, deltaY < 0) и достигнут низ
-                if (touchDeltaY < -50 && scrollTop + clientHeight >= scrollHeight - 2) {
+                if (touchDeltaY < -80 && scrollTop + clientHeight >= scrollHeight - 2) {
                     closeDetail();
                     return;
                 }
