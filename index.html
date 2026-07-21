@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>В отпуск!</title>
+    <!-- theme-color для Android (меняется скриптом) -->
+    <meta name="theme-color" content="#dff3f4" id="themeColorMeta" />
+    <!-- Favicon (простая SVG-иконка) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 
@@ -1733,6 +1737,7 @@
                 transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
                     box-shadow 0.35s ease,
                     border-color 0.35s ease;
+                padding: 16px 14px 48px;
             }
             .country-card:hover:not(:active) {
                 transform: translateY(-6px) scale(1.02);
@@ -1748,74 +1753,7 @@
             .country-card .card-color {
                 transition: width 0.35s ease;
             }
-            [data-tooltip] {
-                position: relative;
-            }
-            [data-tooltip]::after {
-                content: attr(data-tooltip);
-                position: absolute;
-                bottom: calc(100% + 8px);
-                left: 50%;
-                transform: translateX(-50%) translateY(4px);
-                padding: 6px 10px;
-                border-radius: 8px;
-                background: var(--text);
-                color: var(--bg);
-                font-size: 11px;
-                font-weight: 600;
-                white-space: nowrap;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.18s ease, transform 0.18s ease;
-                z-index: 20;
-                box-shadow: var(--shadow);
-            }
-            [data-tooltip]::before {
-                content: "";
-                position: absolute;
-                bottom: calc(100% + 2px);
-                left: 50%;
-                transform: translateX(-50%);
-                border: 5px solid transparent;
-                border-top-color: var(--text);
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.18s ease;
-                z-index: 20;
-            }
-            [data-tooltip]:hover::after,
-            [data-tooltip]:focus-visible::after {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-            [data-tooltip]:hover::before,
-            [data-tooltip]:focus-visible::before {
-                opacity: 1;
-            }
-            .theme-toggle[data-tooltip]::after {
-                left: auto;
-                right: 0;
-                transform: translateX(0) translateY(4px);
-            }
-            .theme-toggle[data-tooltip]:hover::after,
-            .theme-toggle[data-tooltip]:focus-visible::after {
-                transform: translateX(0) translateY(0);
-            }
-            .compare-checkbox[data-tooltip]::after {
-                bottom: auto;
-                top: calc(100% + 8px);
-                transform: translateX(-50%) translateY(-4px);
-            }
-            .compare-checkbox[data-tooltip]::before {
-                bottom: auto;
-                top: calc(100% + 2px);
-                border-top-color: transparent;
-                border-bottom-color: var(--text);
-            }
-            .compare-checkbox[data-tooltip]:hover::after,
-            .compare-checkbox[data-tooltip]:focus-visible::after {
-                transform: translateX(-50%) translateY(0);
-            }
+
             .month-selector,
             .search-container input,
             .filters-toggle {
@@ -1872,9 +1810,6 @@
                 font-size: 12px;
                 padding: 5px 10px;
             }
-            .country-card {
-                padding: 16px 14px 48px;
-            }
             .compare-checkbox {
                 bottom: 14px;
                 right: 14px;
@@ -1908,7 +1843,7 @@
             .detail-content-wrapper {
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
-                gap: 2px 16px;
+                gap: 2px 32px;
                 padding: 4px 18px 8px;
                 align-items: start;
             }
@@ -2073,7 +2008,7 @@
                     <p class="brand-tagline">Куда поехать — по погоде, визе и бюджету</p>
                 </div>
                 <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему" data-tooltip="Сменить тему"></button>
+                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему"></button>
                 </div>
             </div>
         </header>
@@ -4476,6 +4411,12 @@
                 document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
                 if (themeToggle) themeToggle.setAttribute('aria-label', dark ? 'Включить светлую тему' : 'Включить тёмную тему');
                 localStorage.setItem('theme', dark ? 'dark' : 'light');
+                // Обновляем theme-color
+                const meta = document.getElementById('themeColorMeta');
+                if (meta) {
+                    const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+                    meta.content = bg || (dark ? '#07181d' : '#dff3f4');
+                }
             }
 
             // Инициализация темы: сначала проверяем localStorage, если нет — системную
@@ -4730,7 +4671,6 @@
 
                 const compareEl = document.createElement('div');
                 compareEl.className = 'compare-checkbox' + (isSelected ? ' active' : '');
-                compareEl.setAttribute('data-tooltip', isSelected ? 'Убрать из сравнения' : 'Добавить к сравнению');
                 compareEl.textContent = isSelected ? '✓' : '+';
                 compareEl.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -4962,12 +4902,15 @@
 
                 const isDesktop = window.innerWidth >= 768;
 
+                // ---- ИЗМЕНЁННАЯ ШАПКА: флаг и название в одной строке ----
                 let detailHTML = `
                     <div class="detail-hero">
                         <div class="hero-gradient" style="--hero-color: ${heroColor}; --hero-color-dark: ${heroColorDark};"></div>
                         <div class="hero-overlay">
-                            <span class="hero-flag">${c.flag}</span>
-                            <div class="hero-name">${c.name}</div>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                                <span class="hero-flag" style="font-size:22px; line-height:1;">${c.flag}</span>
+                                <div class="hero-name" style="font-size:1.35rem; font-weight:800; letter-spacing:-0.03em; color:white; margin:0;">${c.name}</div>
+                            </div>
                             <div class="hero-sub">
                                 <span>${c.city}</span>
                                 <span class="hero-temp">${icon} ${temp}°</span>
@@ -5141,21 +5084,10 @@
                     });
                 }
 
-                // ===== УПРАВЛЕНИЕ СКРОЛЛОМ =====
-                if (detailCard) {
-                    // Если модалка уже открыта (overlay активен), не сбрасываем скролл
-                    if (!overlay.classList.contains('active')) {
-                        // Первое открытие — скролл вверх
-                        detailCard.scrollTop = 0;
-                        requestAnimationFrame(() => {
-                            if (detailCard) {
-                                detailCard.scrollTop = 0;
-                                setTimeout(() => {
-                                    if (detailCard) detailCard.scrollTop = 0;
-                                }, 50);
-                            }
-                        });
-                    }
+                // Убираем принудительный сброс скролла, чтобы избежать прыжков и мерцания
+                // Если модалка не открыта – открываем, но не трогаем скролл
+                if (!overlay.classList.contains('active')) {
+                    // Открываем без сброса скролла
                 }
 
                 updateDetailButtons();
@@ -5166,11 +5098,9 @@
 
                 // ===== ДОБАВЛЯЕМ ОБРАБОТЧИКИ СВАЙПА ДЛЯ МОБИЛЬНОЙ ВЕРСИИ =====
                 if (window.innerWidth < 768) {
-                    // Удаляем предыдущие обработчики, чтобы не навешивать повторно
                     detailCard.removeEventListener('touchstart', handleTouchStart);
                     detailCard.removeEventListener('touchmove', handleTouchMove);
                     detailCard.removeEventListener('touchend', handleTouchEnd);
-                    // Добавляем новые
                     detailCard.addEventListener('touchstart', handleTouchStart, { passive: true });
                     detailCard.addEventListener('touchmove', handleTouchMove, { passive: true });
                     detailCard.addEventListener('touchend', handleTouchEnd, { passive: true });
@@ -5206,7 +5136,6 @@
                 const scrollHeight = scrollEl.scrollHeight;
                 const clientHeight = scrollEl.clientHeight;
 
-                // Увеличиваем порог с 50 до 80 для менее чувствительного закрытия
                 if (touchDeltaY > 80 && scrollTop === 0) {
                     closeDetail();
                     return;
@@ -5220,9 +5149,7 @@
             function closeDetail() {
                 if (overlay) overlay.classList.remove('active');
                 document.body.style.overflow = '';
-                // Сбрасываем currentDetailId, чтобы при resize не открывалось заново
                 currentDetailId = null;
-                // Удаляем обработчики свайпа, чтобы не оставались висячими
                 if (detailCard) {
                     detailCard.removeEventListener('touchstart', handleTouchStart);
                     detailCard.removeEventListener('touchmove', handleTouchMove);
@@ -5390,7 +5317,6 @@
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    // Открываем детали только если они активны и есть currentDetailId
                     if (currentDetailId && overlay && overlay.classList.contains('active')) {
                         openDetail(currentDetailId);
                     }
