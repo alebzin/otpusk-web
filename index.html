@@ -5,102 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>В отпуск!</title>
     <style>
-        /* --- базовые переменные (только серые фоны) --- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+
         :root {
-            --bg: #f2f2f7;
-            --bg-card: #ffffff;
-            --text: #1a1a1a;
-            --text-secondary: #6c6c70;
-            --border: #e5e5ea;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.10);
-            --tag-bg: #f0f0f5;
-            --accent: #007aff;
-            --accent-light: rgba(0, 122, 255, 0.12);
-            --overlay: rgba(0, 0, 0, 0.4);
-            --success: #34c759;
-            --warning: #ffcc00;
-            --danger: #ff3b30;
-            --radius-card: 14px;
-            --radius-lg: 20px;
-            --transition: 0.2s ease;
+            --bg: #dff3f4;
+            --bg-deep: #c5e8eb;
+            --bg-card: rgba(255, 252, 248, 0.92);
+            --text: #0c2b33;
+            --text-secondary: #4a6b73;
+            --border: rgba(12, 43, 51, 0.1);
+            --shadow: 0 10px 28px rgba(12, 43, 51, 0.08);
+            --shadow-hover: 0 14px 36px rgba(12, 43, 51, 0.14);
+            --tag-bg: rgba(14, 138, 138, 0.08);
+            --accent: #0e8a8a;
+            --accent-deep: #0a6b6b;
+            --accent-light: rgba(14, 138, 138, 0.14);
+            --sun: #f0b429;
+            --sun-soft: rgba(240, 180, 41, 0.22);
+            --overlay: rgba(8, 32, 38, 0.45);
+            --success: #1f8a5b;
+            --warning: #d4a017;
+            --danger: #c44b3c;
+            --radius-card: 18px;
+            --radius-lg: 24px;
+            --radius-ctl: 14px;
+            --transition: 0.22s ease;
             --max-width: 600px;
+            --font-ui: "Outfit", sans-serif;
+            --font-brand: "Syne", sans-serif;
         }
         [data-theme="dark"] {
-            --bg: #000000;
-            --bg-card: #1c1c1e;
-            --text: #f5f5f7;
-            --text-secondary: #98989e;
-            --border: #2c2c2e;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
-            --tag-bg: #2c2c2e;
-            --accent: #0a84ff;
-            --accent-light: rgba(10, 132, 255, 0.20);
-            --overlay: rgba(0, 0, 0, 0.7);
-            --success: #30d158;
-            --warning: #ffd60a;
-            --danger: #ff453a;
+            --bg: #07181d;
+            --bg-deep: #0b242b;
+            --bg-card: rgba(16, 40, 46, 0.94);
+            --text: #e8f6f7;
+            --text-secondary: #9bb5bb;
+            --border: rgba(232, 246, 247, 0.1);
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+            --shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.45);
+            --tag-bg: rgba(240, 180, 41, 0.1);
+            --accent: #2ec4b6;
+            --accent-deep: #1fa89c;
+            --accent-light: rgba(46, 196, 182, 0.18);
+            --sun: #f5c84c;
+            --sun-soft: rgba(245, 200, 76, 0.18);
+            --overlay: rgba(0, 0, 0, 0.65);
+            --success: #3dba7e;
+            --warning: #f0c14d;
+            --danger: #e57368;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg);
+            font-family: var(--font-ui);
+            background:
+                radial-gradient(ellipse 90% 55% at 12% -10%, var(--sun-soft), transparent 55%),
+                radial-gradient(ellipse 70% 50% at 100% 8%, rgba(14, 138, 138, 0.18), transparent 50%),
+                linear-gradient(165deg, var(--bg) 0%, var(--bg-deep) 55%, var(--bg) 100%);
+            background-attachment: fixed;
             color: var(--text);
-            padding: 16px 12px 100px;
+            padding: 20px 14px 110px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.35s, color 0.35s;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.35) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.25) 0 1px, transparent 1.5px);
+            background-size: 48px 48px, 36px 36px;
+            animation: driftDots 28s linear infinite;
+        }
+        @keyframes driftDots {
+            from { transform: translateY(0); }
+            to { transform: translateY(-36px); }
         }
         .app {
+            position: relative;
+            z-index: 1;
             max-width: var(--max-width);
             width: 100%;
+            animation: appIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes appIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- остальные стили (общие) --- */
         .header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            gap: 10px;
+            margin-bottom: 18px;
         }
         .header-top {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 12px;
             width: 100%;
         }
-        .header h1 {
-            font-weight: 700;
-            font-size: 24px;
-            letter-spacing: -0.5px;
+        .brand-block {
+            min-width: 0;
+            flex: 1;
+        }
+        .header h1,
+        .brand {
+            font-family: var(--font-brand);
+            font-weight: 800;
+            font-size: clamp(2rem, 8vw, 2.55rem);
+            letter-spacing: -0.04em;
+            line-height: 0.95;
             color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: block;
         }
-        .header h1 span {
-            background: var(--tag-bg);
-            padding: 2px 12px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 500;
+        .brand-mark {
+            display: inline-block;
+            width: 0.42em;
+            height: 0.42em;
+            margin-left: 0.12em;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fff6c8, var(--sun) 55%, #e09710);
+            vertical-align: 0.12em;
+            box-shadow: 0 0 0 3px var(--sun-soft);
+            animation: sunPulse 3.2s ease-in-out infinite;
+        }
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px var(--sun-soft); }
+            50% { transform: scale(1.08); box-shadow: 0 0 0 7px transparent; }
+        }
+        .brand-tagline {
+            margin-top: 8px;
+            font-size: 0.95rem;
             color: var(--text-secondary);
-            transition: background 0.3s, color 0.3s;
+            font-weight: 500;
+            max-width: 18rem;
+            line-height: 1.35;
         }
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        #countBadge,
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2rem;
+            height: 1.75rem;
+            padding: 0 0.55rem;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-family: var(--font-ui);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
         .theme-toggle {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
+            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            font-size: 0;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -108,25 +184,41 @@
             transition: var(--transition);
             color: var(--text);
             box-shadow: var(--shadow);
+            position: relative;
         }
-        .theme-toggle:active { transform: scale(0.92); }
-        .theme-toggle:focus-visible { outline: none; }
+        .theme-toggle::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--sun);
+            box-shadow: inset -6px -2px 0 0 var(--bg-card);
+            transition: var(--transition);
+        }
+        [data-theme="dark"] .theme-toggle::before {
+            box-shadow: none;
+            background: radial-gradient(circle at 35% 35%, #fff6c8, var(--sun));
+        }
+        .theme-toggle:active { transform: scale(0.94); }
+        .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         .theme-toggle:focus { outline: none; }
+
         .month-selector {
             display: flex;
             align-items: center;
             gap: 10px;
             background: var(--bg-card);
-            padding: 6px 12px 6px 16px;
-            border-radius: 40px;
+            padding: 6px 12px 6px 14px;
+            border-radius: var(--radius-ctl);
             border: 1px solid var(--border);
-            margin-bottom: 12px;
+            margin-bottom: 0;
             transition: background 0.3s, border-color 0.3s;
             box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
         }
         .month-selector label {
-            font-weight: 500;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 13px;
             color: var(--text-secondary);
             white-space: nowrap;
         }
@@ -134,9 +226,9 @@
             background: var(--tag-bg);
             border: none;
             padding: 10px 32px 10px 12px;
-            border-radius: 30px;
+            border-radius: 10px;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
             cursor: pointer;
             outline: none;
@@ -144,7 +236,7 @@
             flex: 1;
             min-width: 80px;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236c6c70' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6b73' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
             background-size: 12px;
@@ -153,17 +245,17 @@
         }
         .month-selector select:focus { background-color: var(--accent-light); }
         [data-theme="dark"] .month-selector select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2398989e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239bb5bb' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
         }
         .search-container {
-            margin-bottom: 10px;
+            margin-bottom: 0;
             position: relative;
         }
         .search-container input {
             width: 100%;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 40px;
+            border-radius: var(--radius-ctl);
             padding: 12px 18px;
             font-size: 15px;
             color: var(--text);
@@ -172,14 +264,15 @@
             transition: var(--transition);
             box-shadow: var(--shadow);
             padding-right: 44px;
+            backdrop-filter: blur(10px);
         }
         .search-container input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-light);
+            box-shadow: 0 0 0 3px var(--accent-light), var(--shadow);
         }
         .search-container input::placeholder {
             color: var(--text-secondary);
-            opacity: 0.7;
+            opacity: 0.75;
         }
         .search-container .clear-btn {
             position: absolute;
@@ -189,7 +282,7 @@
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             padding: 4px;
             display: none;
@@ -209,7 +302,7 @@
             display: flex;
         }
         .filters-wrapper {
-            margin-bottom: 12px;
+            margin-bottom: 0;
             position: relative;
         }
         .filters-toggle {
@@ -218,54 +311,55 @@
             gap: 8px;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 8px 16px;
+            border-radius: var(--radius-ctl);
+            padding: 8px 14px;
             cursor: pointer;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-secondary);
             transition: var(--transition);
             user-select: none;
             width: 100%;
-            /* изменено: вместо space-between используем flex-start */
             justify-content: flex-start;
             box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
         }
-        .filters-toggle:active { transform: scale(0.98); }
+        .filters-toggle:active { transform: scale(0.99); }
         .filters-toggle .toggle-icon {
-            font-size: 16px;
+            font-size: 14px;
             transition: transform var(--transition);
+            margin-left: 2px;
         }
         .filters-toggle .toggle-icon.open { transform: rotate(180deg); }
         .filters-toggle .filter-count {
-            background: var(--accent);
-            color: white;
-            border-radius: 30px;
-            padding: 0 10px;
+            background: var(--sun);
+            color: #1a2a2e;
+            border-radius: 999px;
+            padding: 0 9px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             line-height: 20px;
             flex-shrink: 0;
-            /* добавляем margin-left: auto, чтобы элемент прижимался к правому краю */
             margin-left: auto;
         }
         .filters-toggle .filter-summary {
             font-size: 12px;
             color: var(--text-secondary);
-            opacity: 0.7;
+            opacity: 0.8;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            flex: 1;  /* занимает оставшееся пространство */
+            flex: 1;
             min-width: 0;
+            font-weight: 500;
         }
         .filters {
             display: none;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
             background: var(--bg-card);
-            padding: 14px 14px 10px;
-            border-radius: 20px;
+            padding: 14px;
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
             margin-top: 8px;
             transition: background 0.3s, border-color 0.3s;
@@ -273,85 +367,85 @@
             width: 100%;
             max-width: 100%;
             overflow: hidden;
+            backdrop-filter: blur(12px);
         }
         .filters.open {
             display: flex;
-            animation: filtersOpen 0.3s ease;
+            animation: filtersOpen 0.28s ease;
         }
         @keyframes filtersOpen {
-            0% { opacity: 0; transform: translateY(-6px); }
+            0% { opacity: 0; transform: translateY(-8px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         .filters .filter-group {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 4px 8px;
+            gap: 6px 8px;
             width: 100%;
         }
         .filters .filter-label {
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
             color: var(--text-secondary);
             white-space: nowrap;
-            min-width: 60px;
+            min-width: 64px;
         }
         .filters .filter-options {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px 6px;
+            gap: 5px 6px;
         }
         .filters .filter-options label {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 3px;
+            gap: 0;
             cursor: pointer;
-            font-weight: 400;
-            font-size: 11px;
+            font-weight: 500;
+            font-size: 12px;
             color: var(--text);
-            background: var(--tag-bg);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1.5px solid transparent;
+            background: transparent;
+            padding: 6px 11px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
             transition: all var(--transition);
             user-select: none;
         }
-        .filters .filter-options label:active { transform: scale(0.95); }
+        .filters .filter-options label:active { transform: scale(0.97); }
         .filters .filter-options label.active {
-            background: var(--accent-light);
-            color: var(--accent);
+            background: var(--accent);
+            color: #fff;
             border-color: var(--accent);
             font-weight: 600;
         }
         .filters .filter-options label .checkmark {
-            font-size: 9px;
-            opacity: 0;
-            transition: opacity var(--transition);
+            display: none;
         }
-        .filters .filter-options label.active .checkmark { opacity: 1; }
         .filters .filter-options label .filter-icon {
-            font-size: 12px;
-            margin-right: 2px;
+            display: none;
         }
         .filters .filter-reset {
             font-size: 12px;
             color: var(--text-secondary);
             cursor: pointer;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 10px;
             border: 1px solid var(--border);
-            background: var(--tag-bg);
+            background: transparent;
             transition: var(--transition);
-            font-weight: 500;
+            font-weight: 600;
             margin-left: auto;
             display: flex;
             align-items: center;
             gap: 4px;
         }
         .filters .filter-reset:hover {
-            background: var(--border);
+            background: var(--tag-bg);
+            color: var(--text);
         }
-        .filters .filter-reset:active { transform: scale(0.95); }
+        .filters .filter-reset:active { transform: scale(0.97); }
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -361,163 +455,130 @@
         .country-card {
             background: var(--bg-card);
             border-radius: var(--radius-card);
-            padding: 12px 10px 40px;
+            padding: 14px 12px 44px;
             box-shadow: var(--shadow);
-            border: 2px solid transparent;
-            transition: all var(--transition);
+            border: 1.5px solid var(--border);
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             cursor: pointer;
             position: relative;
             touch-action: manipulation;
-            text-align: center;
-            animation: cardAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            text-align: left;
+            animation: cardAppear 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(14px);
+            overflow: hidden;
+            backdrop-filter: blur(8px);
         }
         .country-card:hover:not(:active) {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             box-shadow: var(--shadow-hover);
+            border-color: rgba(14, 138, 138, 0.35);
         }
         .country-card:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
         .country-card.selected {
             border-color: var(--accent);
-            background: var(--accent-light);
+            background: color-mix(in srgb, var(--bg-card) 70%, var(--accent-light));
         }
-        /* --- ПАРАЛЛАКС ФЛАГА --- */
         .country-card .flag {
-            transition: transform 0.3s ease, filter 0.3s ease;
+            transition: transform 0.3s ease;
             will-change: transform;
         }
         .country-card:hover .flag {
-            transform: translateY(-4px) scale(1.05);
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+            transform: scale(1.06);
         }
-        [data-theme="dark"] .country-card:hover .flag {
-            filter: drop-shadow(0 4px 8px rgba(255,255,255,0.1));
-        }
-
         .country-card:nth-child(1) { animation-delay: 0.01s; }
-        .country-card:nth-child(2) { animation-delay: 0.02s; }
-        .country-card:nth-child(3) { animation-delay: 0.03s; }
-        .country-card:nth-child(4) { animation-delay: 0.04s; }
-        .country-card:nth-child(5) { animation-delay: 0.05s; }
-        .country-card:nth-child(6) { animation-delay: 0.06s; }
-        .country-card:nth-child(7) { animation-delay: 0.07s; }
-        .country-card:nth-child(8) { animation-delay: 0.08s; }
-        .country-card:nth-child(9) { animation-delay: 0.09s; }
-        .country-card:nth-child(10) { animation-delay: 0.10s; }
-        .country-card:nth-child(11) { animation-delay: 0.11s; }
-        .country-card:nth-child(12) { animation-delay: 0.12s; }
-        .country-card:nth-child(13) { animation-delay: 0.13s; }
-        .country-card:nth-child(14) { animation-delay: 0.14s; }
-        .country-card:nth-child(15) { animation-delay: 0.15s; }
-        .country-card:nth-child(16) { animation-delay: 0.16s; }
-        .country-card:nth-child(17) { animation-delay: 0.17s; }
-        .country-card:nth-child(18) { animation-delay: 0.18s; }
-        .country-card:nth-child(19) { animation-delay: 0.19s; }
-        .country-card:nth-child(20) { animation-delay: 0.20s; }
-        .country-card:nth-child(21) { animation-delay: 0.21s; }
-        .country-card:nth-child(22) { animation-delay: 0.22s; }
-        .country-card:nth-child(23) { animation-delay: 0.23s; }
-        .country-card:nth-child(24) { animation-delay: 0.24s; }
-        .country-card:nth-child(25) { animation-delay: 0.25s; }
-        .country-card:nth-child(26) { animation-delay: 0.26s; }
-        .country-card:nth-child(27) { animation-delay: 0.27s; }
-        .country-card:nth-child(28) { animation-delay: 0.28s; }
-        .country-card:nth-child(29) { animation-delay: 0.29s; }
-        .country-card:nth-child(30) { animation-delay: 0.30s; }
-        .country-card:nth-child(31) { animation-delay: 0.31s; }
-        .country-card:nth-child(32) { animation-delay: 0.32s; }
-        .country-card:nth-child(33) { animation-delay: 0.33s; }
-        .country-card:nth-child(34) { animation-delay: 0.34s; }
-        .country-card:nth-child(35) { animation-delay: 0.35s; }
-        .country-card:nth-child(36) { animation-delay: 0.36s; }
-        .country-card:nth-child(37) { animation-delay: 0.37s; }
-        .country-card:nth-child(38) { animation-delay: 0.38s; }
-        .country-card:nth-child(39) { animation-delay: 0.39s; }
-        .country-card:nth-child(40) { animation-delay: 0.40s; }
-        .country-card:nth-child(41) { animation-delay: 0.41s; }
-        .country-card:nth-child(42) { animation-delay: 0.42s; }
-        .country-card:nth-child(43) { animation-delay: 0.43s; }
-        .country-card:nth-child(44) { animation-delay: 0.44s; }
-        .country-card:nth-child(45) { animation-delay: 0.45s; }
-        .country-card:nth-child(46) { animation-delay: 0.46s; }
-        .country-card:nth-child(47) { animation-delay: 0.47s; }
-        .country-card:nth-child(48) { animation-delay: 0.48s; }
-        .country-card:nth-child(49) { animation-delay: 0.49s; }
-        .country-card:nth-child(50) { animation-delay: 0.50s; }
+        .country-card:nth-child(2) { animation-delay: 0.03s; }
+        .country-card:nth-child(3) { animation-delay: 0.05s; }
+        .country-card:nth-child(4) { animation-delay: 0.07s; }
+        .country-card:nth-child(5) { animation-delay: 0.09s; }
+        .country-card:nth-child(6) { animation-delay: 0.11s; }
+        .country-card:nth-child(7) { animation-delay: 0.13s; }
+        .country-card:nth-child(8) { animation-delay: 0.15s; }
+        .country-card:nth-child(9) { animation-delay: 0.17s; }
+        .country-card:nth-child(10) { animation-delay: 0.19s; }
+        .country-card:nth-child(n+11) { animation-delay: 0.22s; }
         @keyframes cardAppear {
-            0% { opacity: 0; transform: translateY(10px); }
+            0% { opacity: 0; transform: translateY(14px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         .card-color {
-            width: 100%;
-            height: 4px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            flex-shrink: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            height: auto;
+            border-radius: 0;
+            margin-bottom: 0;
         }
-        .flag { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+        .flag { font-size: 30px; line-height: 1; margin-bottom: 8px; margin-left: 4px; }
         .country-name {
-            font-weight: 600;
-            font-size: 14px;
+            font-family: var(--font-brand);
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
             color: var(--text);
-            line-height: 1.2;
+            line-height: 1.15;
+            margin-left: 4px;
         }
         .card-weather {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 6px;
-            margin-top: 4px;
+            margin-top: 10px;
+            margin-left: 4px;
             flex-wrap: wrap;
         }
         .card-weather .temp {
-            font-size: 18px;
+            font-size: 1.35rem;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--accent-deep);
             line-height: 1;
+            letter-spacing: -0.03em;
         }
+        [data-theme="dark"] .card-weather .temp { color: var(--accent); }
         .card-weather .temp sup {
-            font-size: 10px;
-            font-weight: 400;
+            font-size: 0.65rem;
+            font-weight: 500;
             color: var(--text-secondary);
         }
-        .card-weather .weather-icon { font-size: 16px; }
+        .card-weather .weather-icon { font-size: 15px; }
         .card-weather .water {
             font-size: 11px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
         }
         .card-weather .rain-badge {
-            font-size: 9px;
-            background: #dcecf5;
-            padding: 1px 6px;
-            border-radius: 10px;
-            color: #1a4a6a;
+            font-size: 10px;
+            background: rgba(26, 110, 150, 0.12);
+            padding: 2px 7px;
+            border-radius: 8px;
+            color: #1a5f7a;
             font-weight: 600;
         }
         [data-theme="dark"] .card-weather .rain-badge {
-            background: #1a3a5a;
+            background: rgba(143, 207, 239, 0.12);
             color: #8fcfef;
         }
         .card-weather .comfort-badge {
-            font-size: 9px;
-            padding: 1px 6px;
-            border-radius: 10px;
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 8px;
             font-weight: 600;
         }
-        .card-weather .comfort-badge.perfect { background: #d4edda; color: #155724; }
-        .card-weather .comfort-badge.good { background: #fff3cd; color: #856404; }
+        .card-weather .comfort-badge.perfect { background: rgba(31, 138, 91, 0.15); color: #155724; }
+        .card-weather .comfort-badge.good { background: var(--sun-soft); color: #7a5a00; }
         .card-weather .comfort-badge.ok {
-            background: #f0c27a;
-            color: #2d1b00;
+            background: rgba(212, 160, 23, 0.2);
+            color: #5c4500;
         }
-        .card-weather .comfort-badge.bad { background: #f8d7da; color: #721c24; }
+        .card-weather .comfort-badge.bad { background: rgba(196, 75, 60, 0.15); color: #7a2a22; }
         [data-theme="dark"] .card-weather .comfort-badge.perfect { background: #1a3a2a; color: #8fdfb0; }
         [data-theme="dark"] .card-weather .comfort-badge.good { background: #3a3a1a; color: #e8d060; }
         [data-theme="dark"] .card-weather .comfort-badge.ok {
@@ -529,43 +590,44 @@
             position: absolute;
             bottom: 12px;
             right: 12px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
             background: var(--bg-card);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
             transition: all var(--transition);
             color: var(--text-secondary);
-            box-shadow: var(--shadow);
+            box-shadow: none;
             outline: none;
             z-index: 2;
+            font-weight: 600;
         }
-        .compare-checkbox:focus-visible { outline: none; }
+        .compare-checkbox:focus-visible { outline: 2px solid var(--accent); }
         .compare-checkbox:focus { outline: none; }
         .compare-checkbox.active {
             background: var(--accent);
             border-color: var(--accent);
             color: white;
-            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+            box-shadow: none;
         }
         .compare-checkbox:hover {
-            transform: scale(1.05);
+            transform: scale(1.04);
         }
         .detail-overlay {
             position: fixed;
             inset: 0;
             background: var(--overlay);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: none;
             align-items: flex-end;
             justify-content: center;
-            padding: 20px 16px 20px;
+            padding: 16px 12px 16px;
             z-index: 1000;
             animation: fadeIn 0.25s ease;
             touch-action: none;
@@ -579,23 +641,25 @@
             background: var(--bg-card);
             width: 100%;
             max-width: 500px;
-            border-radius: var(--radius-lg) var(--radius-lg) 20px 20px;
-            max-height: 85vh;
+            border-radius: var(--radius-lg) var(--radius-lg) 18px 18px;
+            max-height: 88vh;
             overflow-y: auto;
-            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
             transition: background 0.3s;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-hover);
         }
         @keyframes slideUp {
-            0% { opacity: 0; transform: translateY(40px); }
+            0% { opacity: 0; transform: translateY(36px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         .detail-hero {
             position: relative;
             width: 100%;
-            height: 75px;
+            height: 96px;
             overflow: hidden;
             background: var(--tag-bg);
             border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -604,58 +668,62 @@
         .detail-hero .hero-gradient {
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, 
-                var(--hero-color) 0%, 
-                var(--hero-color) 60%, 
+            background: linear-gradient(135deg,
+                var(--hero-color) 0%,
+                color-mix(in srgb, var(--hero-color) 70%, #0e8a8a) 55%,
                 var(--hero-color-dark) 100%
             );
         }
         .detail-hero .hero-overlay {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 8px 16px 8px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.6) 70%);
+            inset: 0;
+            padding: 16px 18px 14px;
+            background: linear-gradient(180deg, transparent 10%, rgba(8, 32, 38, 0.55) 100%);
             color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
         .detail-hero .hero-overlay .hero-flag {
-            font-size: 20px;
+            font-size: 22px;
             display: block;
-            margin-bottom: 0;
+            margin-bottom: 2px;
         }
         .detail-hero .hero-overlay .hero-name {
-            font-size: 16px;
-            font-weight: 700;
+            font-family: var(--font-brand);
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
             color: white;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: none;
         }
         .detail-hero .hero-overlay .hero-sub {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.95);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.92);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            margin-top: 0;
-            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+            margin-top: 4px;
+            text-shadow: none;
         }
         .detail-hero .hero-overlay .hero-sub .hero-temp {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.18);
             backdrop-filter: blur(4px);
-            padding: 1px 8px;
-            border-radius: 12px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 600;
         }
         .detail-close {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.5);
+            top: 10px;
+            right: 10px;
+            background: rgba(8, 32, 38, 0.4);
             backdrop-filter: blur(4px);
             border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
             font-size: 14px;
             line-height: 1;
             cursor: pointer;
@@ -666,21 +734,22 @@
             transition: var(--transition);
             z-index: 10;
         }
-        .detail-close:hover { background: rgba(0, 0, 0, 0.7); transform: scale(1.05); }
-        .detail-close:active { transform: scale(0.92); }
-        .detail-content-wrapper { padding: 6px 18px 18px; }
+        .detail-close:hover { background: rgba(8, 32, 38, 0.6); transform: scale(1.04); }
+        .detail-close:active { transform: scale(0.94); }
+        .detail-content-wrapper { padding: 8px 16px 16px; }
         .detail-block {
-            background: var(--tag-bg);
+            background: transparent;
             border-radius: 14px;
-            padding: 12px 14px;
-            margin: 8px 0;
-            border: 1px solid var(--border);
+            padding: 12px 0;
+            margin: 4px 0;
+            border: none;
+            border-bottom: 1px solid var(--border);
             transition: background 0.3s, border-color 0.3s;
         }
         .detail-block .row {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
+            padding: 5px 0;
             border-bottom: 1px solid var(--border);
             font-size: 13px;
         }
@@ -689,22 +758,24 @@
             color: var(--text-secondary);
         }
         .detail-block .value {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
             text-align: right;
         }
         .detail-block .value.rainy {
-            color: #c0392b;
-            font-weight: 600;
+            color: #c44b3c;
+            font-weight: 700;
         }
         [data-theme="dark"] .detail-block .value.rainy {
             color: #e8746a;
         }
         .detail-section-header {
-            font-weight: 600;
-            font-size: 14px;
+            font-family: var(--font-brand);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
             color: var(--text);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         .detail-info-grid {
             display: flex;
@@ -714,7 +785,7 @@
         .detail-info-grid .info-item {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
+            padding: 5px 0;
             font-size: 13px;
             border-bottom: 1px solid var(--border);
             gap: 6px;
@@ -725,7 +796,7 @@
             white-space: nowrap;
         }
         .detail-info-grid .info-item .info-value {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
             text-align: right;
             display: flex;
@@ -734,12 +805,12 @@
             gap: 4px;
         }
         .budget-calculator {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 12px 14px;
-            margin: 8px 0;
-            border: 2px solid var(--accent);
-            box-shadow: var(--shadow);
+            background: color-mix(in srgb, var(--bg-card) 80%, var(--sun-soft));
+            border-radius: 16px;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1.5px solid color-mix(in srgb, var(--sun) 45%, var(--border));
+            box-shadow: none;
         }
         .budget-calculator .budget-header {
             display: flex;
@@ -748,13 +819,15 @@
             margin-bottom: 8px;
         }
         .budget-calculator .budget-title {
-            font-weight: 600;
-            font-size: 15px;
+            font-family: var(--font-brand);
+            font-weight: 700;
+            font-size: 1rem;
             color: var(--text);
         }
         .budget-calculator .budget-people {
             font-size: 12px;
             color: var(--text-secondary);
+            font-weight: 500;
         }
         .budget-calculator .budget-row {
             display: flex;
@@ -765,10 +838,12 @@
         }
         .budget-calculator .budget-row:last-of-type { border-bottom: none; }
         .budget-calculator .budget-total {
-            font-weight: 700;
-            color: var(--accent);
-            font-size: 17px;
+            font-weight: 800;
+            color: var(--accent-deep);
+            font-size: 1.15rem;
+            font-family: var(--font-brand);
         }
+        [data-theme="dark"] .budget-calculator .budget-total { color: var(--accent); }
         .budget-calculator .budget-label {
             color: var(--text-secondary);
             display: flex;
@@ -785,39 +860,40 @@
             margin-top: 6px;
             padding-top: 6px;
             border-top: 1px solid var(--border);
+            line-height: 1.4;
         }
         .budget-calculator .trip-partner {
             margin-top: 10px;
-            padding: 10px 12px;
-            background: linear-gradient(135deg, #f8f4ff 0%, #f0ecff 100%);
+            padding: 12px;
+            background: rgba(14, 138, 138, 0.08);
             border-radius: 12px;
-            border: 1px solid #d4c8f0;
+            border: 1px solid rgba(14, 138, 138, 0.2);
             font-size: 12px;
             color: var(--text-secondary);
             line-height: 1.5;
         }
         [data-theme="dark"] .budget-calculator .trip-partner {
-            background: linear-gradient(135deg, #1a1a3a 0%, #2a1a4a 100%);
-            border-color: #4a3a6a;
+            background: rgba(46, 196, 182, 0.1);
+            border-color: rgba(46, 196, 182, 0.25);
         }
         .budget-calculator .trip-partner .trip-link {
             display: inline-block;
-            margin-top: 6px;
-            padding: 6px 16px;
+            margin-top: 8px;
+            padding: 8px 16px;
             background: var(--accent);
             color: white;
-            border-radius: 20px;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 13px;
             transition: all var(--transition);
         }
         .budget-calculator .trip-partner .trip-link:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            transform: translateY(-1px);
+            background: var(--accent-deep);
         }
         .budget-calculator .trip-partner .trip-link:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
         .budget-days-selector {
             display: flex;
@@ -826,49 +902,51 @@
             margin: 6px 0 8px;
         }
         .budget-days-selector button {
-            padding: 4px 12px;
-            border-radius: 16px;
+            padding: 6px 12px;
+            border-radius: 10px;
             border: 1.5px solid var(--border);
-            background: var(--tag-bg);
+            background: transparent;
             color: var(--text);
             font-size: 12px;
             cursor: pointer;
             transition: all var(--transition);
-            font-weight: 500;
+            font-weight: 600;
+            font-family: inherit;
         }
         .budget-days-selector button.active {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
         }
-        .budget-days-selector button:active { transform: scale(0.95); }
+        .budget-days-selector button:active { transform: scale(0.97); }
         .budget-days-selector button:hover:not(.active) {
             border-color: var(--accent);
         }
         .detail-temp-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 2px;
+            gap: 4px;
             margin: 4px 0 2px;
             text-align: center;
         }
         .detail-temp-grid .month {
             font-size: 10px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
         }
         .detail-temp-grid .deg {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-deep);
         }
+        [data-theme="dark"] .detail-temp-grid .deg { color: var(--accent); }
         .detail-temp-grid .icon-sm { font-size: 12px; display: block; }
         .detail-temp-grid .rain-badge {
-            font-size: 7px;
-            background: #c5dcee;
+            font-size: 8px;
+            background: rgba(26, 110, 150, 0.15);
             border-radius: 6px;
             padding: 0 3px;
-            color: #1a4a6a;
+            color: #1a5f7a;
             font-weight: 700;
         }
         [data-theme="dark"] .detail-temp-grid .rain-badge {
@@ -876,11 +954,12 @@
             color: #8fcfef;
         }
         .rain-details-block {
-            background: var(--tag-bg);
-            border-radius: 14px;
-            padding: 10px 14px;
-            margin: 8px 0;
-            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 0;
+            padding: 10px 0;
+            margin: 4px 0;
+            border: none;
+            border-bottom: 1px solid var(--border);
         }
         .rain-details-block .row {
             display: flex;
@@ -892,169 +971,179 @@
             color: var(--text-secondary);
         }
         .rain-details-block .value {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
             text-align: right;
         }
         .rain-details-block .value.rainy {
-            color: #c0392b;
-            font-weight: 600;
+            color: #c44b3c;
+            font-weight: 700;
         }
         .rain-details-block .rain-description {
             font-size: 12px;
             color: var(--text-secondary);
-            padding-top: 4px;
+            padding-top: 6px;
             border-top: 1px solid var(--border);
-            margin-top: 4px;
-            line-height: 1.4;
+            margin-top: 6px;
+            line-height: 1.45;
         }
         .sights-festivals-tips-block {
-            background: var(--tag-bg);
-            border-radius: 14px;
-            padding: 12px 14px;
-            margin: 8px 0;
-            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 0;
+            padding: 10px 0;
+            margin: 4px 0;
+            border: none;
+            border-bottom: 1px solid var(--border);
         }
         .sights-festivals-tips-block .section-title {
-            font-weight: 600;
-            font-size: 14px;
+            font-family: var(--font-brand);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
             color: var(--text);
-            margin: 8px 0 4px;
+            margin: 10px 0 6px;
         }
         .sights-festivals-tips-block .section-title:first-child { margin-top: 0; }
         .sights-festivals-tips-block .sights-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px 6px;
+            gap: 6px;
         }
         .sights-festivals-tips-block .sight-item {
             font-size: 12px;
             color: var(--text);
-            background: var(--bg-card);
-            padding: 3px 10px;
-            border-radius: 12px;
+            background: var(--tag-bg);
+            padding: 5px 10px;
+            border-radius: 10px;
             border: 1px solid var(--border);
+            font-weight: 500;
         }
         .sights-festivals-tips-block .festival-badge {
             display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            background: #e8d5f5;
-            color: #6c3483;
+            padding: 5px 10px;
+            border-radius: 10px;
+            background: var(--sun-soft);
+            color: #7a5a00;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             margin: 2px;
         }
         [data-theme="dark"] .sights-festivals-tips-block .festival-badge {
-            background: #2a1a3a;
-            color: #d8a0f0;
+            background: rgba(245, 200, 76, 0.15);
+            color: #f0d070;
         }
         .sights-festivals-tips-block .tip-text {
             font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.5;
             margin-top: 4px;
-            padding: 8px 12px;
-            background: var(--bg-card);
-            border-radius: 10px;
+            padding: 10px 12px;
+            background: var(--tag-bg);
+            border-radius: 12px;
             border: 1px solid var(--border);
         }
         .checklist-block {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 12px 14px;
-            margin: 8px 0;
-            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 0;
+            padding: 10px 0;
+            margin: 4px 0;
+            border: none;
         }
         .checklist-block .checklist-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 5px 0;
+            padding: 7px 0;
             font-size: 13px;
             border-bottom: 1px solid var(--border);
         }
         .checklist-block .checklist-item:last-child { border-bottom: none; }
         .checklist-block .checklist-item .check-icon {
-            font-size: 16px;
-            width: 24px;
+            font-size: 14px;
+            width: 22px;
             text-align: center;
+            opacity: 0.85;
         }
         .checklist-block .checklist-item .check-text {
             color: var(--text);
-            font-weight: 500;
+            font-weight: 600;
         }
         .checklist-block .checklist-item .check-detail {
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 11px;
             margin-left: auto;
             background: var(--tag-bg);
-            padding: 1px 8px;
-            border-radius: 10px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 600;
         }
         .checklist-block .checklist-title {
-            font-weight: 600;
-            font-size: 14px;
+            font-family: var(--font-brand);
+            font-weight: 700;
+            font-size: 1rem;
             color: var(--text);
             margin-bottom: 6px;
         }
         .detail-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            justify-content: flex-end;
-            padding: 0 18px 18px;
+            gap: 8px;
+            justify-content: stretch;
+            padding: 0 16px 18px;
         }
         .detail-actions button {
-            background: var(--tag-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 6px 14px;
+            background: transparent;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
             cursor: pointer;
             transition: all var(--transition);
+            font-family: inherit;
+            flex: 1;
+            min-width: 140px;
         }
-        .detail-actions button:active { transform: scale(0.95); }
+        .detail-actions button:active { transform: scale(0.97); }
         .detail-actions .add-compare-btn {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
         }
         .detail-actions .add-compare-btn.added {
-            background: var(--tag-bg);
+            background: transparent;
             color: var(--text);
             border-color: var(--border);
         }
         .detail-actions .compare-from-detail {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
+            background: var(--sun);
+            color: #1a2a2e;
+            border-color: var(--sun);
             display: none;
         }
-        .detail-actions .compare-from-detail.visible { display: inline-flex; }
+        .detail-actions .compare-from-detail.visible { display: inline-flex; justify-content: center; }
         .season-tag {
             font-size: 10px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 12px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 8px;
             display: inline-block;
         }
         .season-tag.high {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(196, 75, 60, 0.15);
+            color: #7a2a22;
+            border: none;
         }
         .season-tag.medium {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffc107;
+            background: var(--sun-soft);
+            color: #7a5a00;
+            border: none;
         }
         .season-tag.low {
-            background: #d4edda;
+            background: rgba(31, 138, 91, 0.15);
             color: #155724;
-            border: 1px solid #b8daff;
+            border: none;
         }
         [data-theme="dark"] .season-tag.high {
             background: #3a1a1a;
@@ -1070,29 +1159,29 @@
         }
         .type-badge {
             font-size: 10px;
-            font-weight: 500;
-            padding: 2px 8px;
-            border-radius: 12px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 8px;
             display: inline-block;
             margin: 1px 3px 1px 0;
             border: 1px solid var(--border);
-            background: var(--bg-card);
+            background: var(--tag-bg);
             color: var(--text-secondary);
         }
         .detail-card .type-badges-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 3px;
+            gap: 4px;
             justify-content: flex-end;
         }
         .detail-card .type-badges-row .type-badge {
             font-size: 10px;
-            padding: 2px 8px;
+            padding: 3px 8px;
         }
         .flight-info-compact {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
+            padding: 5px 0;
             border-bottom: 1px solid var(--border);
             font-size: 13px;
         }
@@ -1101,46 +1190,48 @@
             color: var(--text-secondary);
         }
         .flight-info-compact .flight-value {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
         }
         .plug-tag {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 10px;
             border: 1.5px solid var(--border);
-            background: var(--bg-card);
-            font-weight: 500;
+            background: var(--tag-bg);
+            font-weight: 700;
             font-size: 12px;
-            color: var(--accent);
+            color: var(--accent-deep);
             cursor: pointer;
             transition: all var(--transition);
             margin: 1px 2px;
             user-select: none;
         }
+        [data-theme="dark"] .plug-tag { color: var(--accent); }
         .plug-tag:hover {
             border-color: var(--accent);
             background: var(--accent-light);
             transform: scale(1.02);
         }
-        .plug-tag:active { transform: scale(0.95); }
-        .plug-tag .plug-icon { margin-right: 2px; }
+        .plug-tag:active { transform: scale(0.97); }
+        .plug-tag .plug-icon { display: none; }
         .compare-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--bg-card);
+            background: color-mix(in srgb, var(--bg-card) 92%, transparent);
             border-top: 1px solid var(--border);
-            padding: 10px 16px;
+            padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
             display: none;
             justify-content: space-between;
             align-items: center;
             z-index: 500;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -8px 28px rgba(12, 43, 51, 0.1);
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
             transform: translateY(100%);
             opacity: 0;
+            backdrop-filter: blur(14px);
         }
         .compare-bar.active {
             display: flex;
@@ -1157,9 +1248,10 @@
             min-width: 0;
         }
         .compare-bar .compare-info .count {
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent);
             font-size: 15px;
+            font-family: var(--font-brand);
         }
         .compare-bar .compare-info .selected-chips {
             display: flex;
@@ -1172,10 +1264,10 @@
         }
         .compare-bar .compare-info .selected-chips .chip {
             background: var(--tag-bg);
-            padding: 2px 8px 2px 6px;
-            border-radius: 12px;
+            padding: 3px 8px 3px 6px;
+            border-radius: 10px;
             border: 1px solid var(--border);
-            font-weight: 500;
+            font-weight: 600;
             font-size: 11px;
             color: var(--text);
             display: flex;
@@ -1192,13 +1284,14 @@
             flex-shrink: 0;
         }
         .compare-bar .compare-actions button {
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 9px 14px;
+            border-radius: 12px;
             border: none;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 700;
             cursor: pointer;
             transition: all var(--transition);
+            font-family: inherit;
         }
         .compare-bar .compare-actions .compare-btn {
             background: var(--accent);
@@ -1208,19 +1301,19 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
-        .compare-bar .compare-actions .compare-btn:active:not(:disabled) { transform: scale(0.95); }
+        .compare-bar .compare-actions .compare-btn:active:not(:disabled) { transform: scale(0.97); }
         .compare-bar .compare-actions .clear-btn {
-            background: var(--tag-bg);
+            background: transparent;
             color: var(--text);
             border: 1px solid var(--border);
         }
-        .compare-bar .compare-actions .clear-btn:active { transform: scale(0.95); }
+        .compare-bar .compare-actions .clear-btn:active { transform: scale(0.97); }
         .compare-overlay {
             position: fixed;
             inset: 0;
             background: var(--overlay);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -1237,8 +1330,10 @@
             padding: 20px 18px 24px;
             max-height: 90vh;
             overflow-y: auto;
-            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             transition: background 0.3s;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-hover);
         }
         .compare-modal .modal-header {
             display: flex;
@@ -1247,16 +1342,18 @@
             margin-bottom: 14px;
         }
         .compare-modal .modal-header h2 {
-            font-size: 18px;
-            font-weight: 700;
+            font-family: var(--font-brand);
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
             color: var(--text);
         }
         .compare-modal .modal-close {
             background: var(--tag-bg);
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
             color: var(--text);
@@ -1265,33 +1362,36 @@
             justify-content: center;
             transition: var(--transition);
         }
-        .compare-modal .modal-close:active { transform: scale(0.92); }
+        .compare-modal .modal-close:active { transform: scale(0.94); }
         .compare-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
         .compare-item {
-            background: var(--tag-bg);
-            border-radius: 14px;
-            padding: 12px;
-            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 16px;
+            padding: 14px;
+            border: 1.5px solid var(--border);
             transition: background 0.3s, border-color 0.3s;
         }
         .compare-item .ci-flag { font-size: 28px; }
         .compare-item .ci-name {
-            font-weight: 600;
-            font-size: 15px;
+            font-family: var(--font-brand);
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
             color: var(--text);
         }
         .compare-item .ci-city {
             font-size: 12px;
             color: var(--text-secondary);
+            margin-bottom: 6px;
         }
         .compare-item .ci-row {
             display: flex;
             justify-content: space-between;
-            padding: 3px 0;
+            padding: 4px 0;
             font-size: 12px;
             border-bottom: 1px solid var(--border);
         }
@@ -1300,12 +1400,12 @@
             color: var(--text-secondary);
         }
         .compare-item .ci-value {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text);
             text-align: right;
         }
         .compare-item .ci-value.rainy {
-            color: #c0392b;
+            color: #c44b3c;
         }
         [data-theme="dark"] .compare-item .ci-value.rainy {
             color: #e8746a;
@@ -1313,93 +1413,99 @@
         .compare-item .ci-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 3px;
-            margin-top: 4px;
+            gap: 4px;
+            margin-top: 8px;
         }
         .compare-item .ci-tags .tag {
-            font-size: 9px;
-            padding: 1px 6px;
-            border-radius: 10px;
-            background: var(--bg-card);
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 8px;
+            background: var(--tag-bg);
             border: 1px solid var(--border);
             color: var(--text-secondary);
+            font-weight: 600;
         }
         .compare-hint {
             position: fixed;
-            bottom: 76px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 10px 20px;
+            border-radius: 14px;
+            padding: 12px 18px;
             font-size: 14px;
             color: var(--text-secondary);
             box-shadow: var(--shadow-hover);
             display: none;
             z-index: 450;
-            animation: floatUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: floatUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             text-align: center;
             max-width: 90%;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
         }
         .compare-hint.active { display: block; }
         .compare-hint .highlight {
             color: var(--accent);
-            font-weight: 600;
+            font-weight: 700;
         }
         @keyframes floatUp {
-            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            0% { opacity: 0; transform: translateX(-50%) translateY(16px); }
             100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 40px 20px;
+            padding: 48px 20px;
             color: var(--text-secondary);
-            font-size: 16px;
+            font-size: 1.05rem;
+            font-weight: 500;
             animation: fadeIn 0.3s ease;
         }
         .empty-state span {
             font-size: 14px;
             display: block;
-            margin-top: 4px;
-            opacity: 0.7;
+            margin-top: 6px;
+            opacity: 0.8;
         }
         .empty-state .reset-empty-btn {
-            margin-top: 16px;
-            padding: 8px 24px;
-            border-radius: 30px;
-            border: 1px solid var(--accent);
+            margin-top: 18px;
+            padding: 10px 22px;
+            border-radius: 12px;
+            border: 1.5px solid var(--accent);
             background: var(--accent-light);
-            color: var(--accent);
-            font-weight: 600;
+            color: var(--accent-deep);
+            font-weight: 700;
             font-size: 14px;
             cursor: pointer;
             transition: all var(--transition);
+            font-family: inherit;
         }
+        [data-theme="dark"] .empty-state .reset-empty-btn { color: var(--accent); }
         .empty-state .reset-empty-btn:hover {
             background: var(--accent);
             color: white;
         }
-        .empty-state .reset-empty-btn:active { transform: scale(0.95); }
+        .empty-state .reset-empty-btn:active { transform: scale(0.97); }
         .visa-difficulty {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
+            padding: 3px 10px;
+            border-radius: 8px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
         }
         .visa-difficulty.easy {
-            background: #d4edda;
+            background: rgba(31, 138, 91, 0.15);
             color: #155724;
         }
         .visa-difficulty.medium {
-            background: #fff3cd;
-            color: #856404;
+            background: var(--sun-soft);
+            color: #7a5a00;
         }
         .visa-difficulty.hard {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(196, 75, 60, 0.15);
+            color: #7a2a22;
         }
         [data-theme="dark"] .visa-difficulty.easy {
             background: #1a3a2a;
@@ -1415,14 +1521,15 @@
         }
         .visa-header-tag {
             display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
+            padding: 3px 10px;
+            border-radius: 8px;
             font-size: 12px;
-            font-weight: 600;
-            background: var(--bg-card);
+            font-weight: 700;
+            background: var(--tag-bg);
             border: 1px solid var(--border);
             color: var(--text);
             margin-left: 6px;
+            font-family: var(--font-ui);
         }
         .plug-svg-container {
             display: flex;
@@ -1433,17 +1540,17 @@
         .plug-svg-container svg {
             max-width: 120px;
             height: auto;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+            filter: drop-shadow(0 4px 12px rgba(12, 43, 51, 0.1));
         }
         [data-theme="dark"] .plug-svg-container svg {
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
         }
         .plug-modal-overlay {
             position: fixed;
             inset: 0;
             background: var(--overlay);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -1457,9 +1564,11 @@
             width: 100%;
             max-width: 400px;
             border-radius: var(--radius-lg);
-            padding: 24px 20px 20px;
-            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 22px 20px 20px;
+            animation: slideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             transition: background 0.3s;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-hover);
         }
         .plug-modal .plug-modal-header {
             display: flex;
@@ -1468,16 +1577,18 @@
             margin-bottom: 16px;
         }
         .plug-modal .plug-modal-header h3 {
-            font-size: 18px;
-            font-weight: 700;
+            font-family: var(--font-brand);
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
             color: var(--text);
         }
         .plug-modal .plug-modal-close {
             background: var(--tag-bg);
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
             color: var(--text);
@@ -1486,21 +1597,22 @@
             justify-content: center;
             transition: var(--transition);
         }
-        .plug-modal .plug-modal-close:active { transform: scale(0.92); }
+        .plug-modal .plug-modal-close:active { transform: scale(0.94); }
         .plug-modal .plug-type-display {
             text-align: center;
             padding: 12px 0 8px;
         }
         .plug-modal .plug-type-display .plug-type-name {
-            font-size: 20px;
-            font-weight: 700;
+            font-family: var(--font-brand);
+            font-size: 1.25rem;
+            font-weight: 800;
             color: var(--accent);
             margin-top: 4px;
         }
         .plug-modal .plug-type-display .plug-type-desc {
             font-size: 14px;
             color: var(--text-secondary);
-            margin-top: 6px;
+            margin-top: 8px;
             line-height: 1.5;
         }
         .plug-modal .plug-countries {
@@ -1511,67 +1623,65 @@
         .plug-modal .plug-countries .pc-label {
             font-size: 12px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
         }
         .plug-modal .plug-countries .pc-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px 8px;
-            margin-top: 4px;
+            gap: 6px;
+            margin-top: 8px;
         }
         .plug-modal .plug-countries .pc-list span {
             font-size: 12px;
             background: var(--tag-bg);
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 4px 9px;
+            border-radius: 10px;
             border: 1px solid var(--border);
             color: var(--text);
+            font-weight: 500;
         }
         .recommend {
-            padding: 10px 14px;
+            padding: 12px 14px;
             background: var(--accent-light);
-            border-radius: 12px;
-            border: 1px solid var(--accent);
+            border-radius: 14px;
+            border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
             color: var(--text);
             font-size: 13px;
             line-height: 1.5;
-            margin: 8px 0;
+            margin: 10px 0;
+            font-weight: 500;
         }
 
-        /* --- верхняя строка для десктопа (обёртка) --- */
         .top-row {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-bottom: 14px;
         }
 
-        /* --- десктопная адаптация (переопределяем стили) --- */
         @media (min-width: 768px) {
             body {
-                padding: 24px 32px 100px;
+                padding: 28px 32px 110px;
             }
             .app {
-                max-width: 1200px;
-                padding: 0 16px;
+                max-width: 1100px;
             }
-            /* карточки в 3 колонки */
             .grid {
                 grid-template-columns: repeat(3, 1fr) !important;
-                gap: 16px;
+                gap: 14px;
             }
-            /* верхняя строка: дата, поиск, фильтры в одну линию */
             .top-row {
                 flex-direction: row;
                 flex-wrap: wrap;
                 align-items: stretch;
                 gap: 10px;
-                margin-bottom: 12px;
+                margin-bottom: 16px;
             }
             .top-row .month-selector {
                 flex: 0 1 auto;
                 margin-bottom: 0;
-                padding: 6px 12px 6px 16px;
-                min-width: 140px;
+                padding: 6px 12px 6px 14px;
+                min-width: 150px;
             }
             .top-row .search-container {
                 flex: 1;
@@ -1584,11 +1694,10 @@
                 min-width: 140px;
                 max-width: 280px;
             }
-            /* одинаковые высоты */
             .month-selector,
             .search-container input,
             .filters-toggle {
-                height: 44px;
+                height: 46px;
                 box-sizing: border-box;
             }
             .month-selector select {
@@ -1602,14 +1711,14 @@
                 min-height: 34px;
             }
             .search-container input {
-                height: 44px;
+                height: 46px;
                 padding: 0 18px;
                 font-size: 14px;
                 padding-right: 44px;
             }
             .filters-toggle {
-                height: 44px;
-                padding: 0 16px;
+                height: 46px;
+                padding: 0 14px;
                 font-size: 13px;
                 white-space: nowrap;
             }
@@ -1622,10 +1731,10 @@
                 margin: 0 8px;
             }
             .filters {
-                padding: 12px 14px 10px;
-                margin-top: 6px;
-                min-width: 320px;
-                max-width: 700px;
+                padding: 14px;
+                margin-top: 8px;
+                min-width: 340px;
+                max-width: 720px;
                 position: absolute;
                 top: calc(100% + 6px);
                 right: 0;
@@ -1638,365 +1747,69 @@
                 align-items: center;
             }
             .filters .filter-options label {
-                font-size: 11px;
-                padding: 3px 10px;
+                font-size: 12px;
+                padding: 5px 10px;
             }
             .country-card {
-                padding: 14px 12px 50px;
-                border-radius: var(--radius-card);
-            }
-            .country-card:hover:not(:active) {
-                transform: translateY(-3px);
-                box-shadow: var(--shadow-hover);
+                padding: 16px 14px 48px;
             }
             .compare-checkbox {
                 bottom: 14px;
                 right: 14px;
-                position: absolute; /* чтобы псевдоэлемент позиционировался относительно кнопки */
             }
             .detail-overlay {
                 align-items: center;
                 padding: 40px 20px;
             }
             .detail-card {
-                max-width: 1200px !important;
+                max-width: 1100px !important;
                 width: 100% !important;
                 max-height: 92vh;
                 overflow-y: auto;
                 border-radius: var(--radius-lg);
                 padding: 0;
             }
-            .detail-card::-webkit-scrollbar {
-                width: 6px;
-            }
-            .detail-card::-webkit-scrollbar-track {
-                background: var(--bg);
-                border-radius: 10px;
-            }
-            .detail-card::-webkit-scrollbar-thumb {
-                background: var(--border);
-                border-radius: 10px;
-            }
-            .detail-card::-webkit-scrollbar-thumb:hover {
-                background: var(--text-secondary);
-            }
             .detail-hero {
-                height: 100px;
+                height: 120px;
                 border-radius: var(--radius-lg) var(--radius-lg) 0 0;
             }
             .detail-hero .hero-overlay .hero-name {
-                font-size: 22px;
-            }
-            .detail-hero .hero-overlay .hero-sub {
-                font-size: 13px;
-            }
-            .detail-hero .hero-overlay {
-                padding: 10px 20px 10px;
-            }
-            .detail-hero .hero-overlay .hero-flag {
-                font-size: 24px;
+                font-size: 1.7rem;
             }
             .detail-content-wrapper {
-                padding: 20px 24px 24px;
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
-                gap: 20px;
-                overflow: hidden;
+                gap: 8px 18px;
+                padding: 12px 22px 22px;
             }
-            .detail-content-wrapper .col-1 {
-                grid-column: 1;
-                overflow: hidden;
-            }
-            .detail-content-wrapper .col-2 {
-                grid-column: 2;
-                overflow: hidden;
-            }
+            .detail-content-wrapper .col-1,
+            .detail-content-wrapper .col-2,
             .detail-content-wrapper .col-3 {
-                grid-column: 3;
-                overflow: hidden;
-            }
-            .detail-block {
-                margin: 0 0 14px 0;
-            }
-            .detail-temp-grid {
-                grid-template-columns: repeat(6, 1fr);
-                gap: 6px;
-            }
-            .detail-actions {
-                padding: 0 24px 20px;
-                justify-content: flex-end;
-                gap: 10px;
+                min-width: 0;
             }
             .compare-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 16px;
-            }
-            .compare-item {
-                padding: 16px;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             }
             .compare-bar {
-                padding: 12px 24px;
-                max-width: 1200px;
                 left: 50%;
-                transform: translateX(-50%) translateY(100%);
-                width: 100%;
+                right: auto;
+                transform: translate(-50%, 100%);
+                width: min(720px, calc(100% - 40px));
                 border-radius: 16px 16px 0 0;
+                border: 1px solid var(--border);
+                border-bottom: none;
             }
             .compare-bar.active {
-                transform: translateX(-50%) translateY(0);
-            }
-            .compare-hint {
-                bottom: 84px;
-                max-width: 500px;
-            }
-            .plug-modal {
-                max-width: 500px;
-                padding: 28px 24px 24px;
-            }
-            /* подсказки для кнопок */
-            .theme-toggle,
-            .compare-checkbox {
-                transition: transform 0.2s, color 0.2s, background 0.2s;
-            }
-            .theme-toggle:hover {
-                transform: scale(1.05);
-                color: var(--accent);
-            }
-            .compare-checkbox:hover {
-                transform: scale(1.08);
-                border-color: var(--accent);
-                color: var(--accent);
-            }
-            .theme-toggle[data-tooltip]:hover::after,
-            .compare-checkbox[data-tooltip]:hover::after {
-                content: attr(data-tooltip);
-                position: absolute;
-                bottom: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(0,0,0,0.75);
-                color: #fff;
-                padding: 4px 10px;
-                border-radius: 8px;
-                font-size: 11px;
-                white-space: nowrap;
-                pointer-events: none;
-                font-weight: 400;
-                backdrop-filter: blur(4px);
-                z-index: 10;
-                margin-bottom: 8px;
-            }
-            /* убираем синюю рамку при наведении на кнопку сравнения */
-            .compare-checkbox:focus-visible {
-                outline: none;
-            }
-            .compare-checkbox:focus {
-                outline: none;
-            }
-            .budget-calculator {
-                margin: 0 0 14px 0;
-            }
-            .rain-details-block {
-                margin: 0 0 14px 0;
-            }
-            .sights-festivals-tips-block {
-                margin: 0 0 14px 0;
-            }
-            .checklist-block {
-                margin: 0 0 14px 0;
-            }
-            .recommend {
-                margin: 0 0 14px 0;
-            }
-            .budget-calculator .budget-days-selector button {
-                padding: 2px 10px;
-                font-size: 11px;
-            }
-            .detail-info-grid .info-item {
-                padding: 3px 0;
-                font-size: 12px;
-            }
-            .detail-block .row {
-                padding: 3px 0;
-                font-size: 12px;
-            }
-            .detail-section-header {
-                font-size: 13px;
-            }
-            .sights-festivals-tips-block .section-title {
-                font-size: 13px;
-            }
-            .sights-festivals-tips-block .sight-item {
-                font-size: 11px;
-            }
-            .sights-festivals-tips-block .festival-badge {
-                font-size: 10px;
-            }
-            .sights-festivals-tips-block .tip-text {
-                font-size: 12px;
-            }
-            .checklist-block .checklist-item {
-                font-size: 12px;
-                padding: 4px 0;
-            }
-            .checklist-block .checklist-title {
-                font-size: 13px;
-            }
-            .detail-temp-grid .deg {
-                font-size: 13px;
-            }
-            .detail-temp-grid .month {
-                font-size: 9px;
-            }
-            .flight-info-compact {
-                font-size: 12px;
-                padding: 3px 0;
-            }
-            .visa-header-tag {
-                font-size: 11px;
-            }
-            .visa-difficulty {
-                font-size: 10px;
-            }
-            .budget-calculator .budget-row {
-                font-size: 12px;
-                padding: 4px 0;
-            }
-            .budget-calculator .budget-total {
-                font-size: 15px;
-            }
-            .budget-calculator .budget-title {
-                font-size: 14px;
-            }
-            .rain-details-block .row {
-                font-size: 12px;
-                padding: 3px 0;
-            }
-            .rain-details-block .rain-description {
-                font-size: 11px;
-            }
-            .recommend {
-                font-size: 12px;
-                padding: 8px 14px;
-            }
-            .filters-wrapper {
-                position: relative;
-            }
-            .filters {
-                position: absolute;
-                top: calc(100% + 6px);
-                right: 0;
-                min-width: 320px;
-                max-width: 700px;
-                z-index: 100;
-                background: var(--bg-card);
-                width: auto;
-            }
-            .search-container .clear-btn {
-                right: 14px;
-                width: 24px;
-                height: 24px;
-                font-size: 16px;
-            }
-            /* полный текст в trip-partner для десктопа */
-            .budget-calculator .trip-partner .trip-partner-text {
-                display: block;
-                font-size: 12px;
-                line-height: 1.6;
-                margin-bottom: 6px;
+                transform: translate(-50%, 0);
             }
         }
 
-        @media (min-width: 1024px) {
-            .grid {
-                grid-template-columns: repeat(4, 1fr) !important;
-                gap: 20px;
-            }
-            .app {
-                max-width: 1400px;
-            }
-            .header h1 {
-                font-size: 28px;
-            }
-            .country-card {
-                padding: 16px 14px 50px;
-            }
-            .country-name {
-                font-size: 15px;
-            }
-            .flag {
-                font-size: 32px;
-            }
-            .card-weather .temp {
-                font-size: 20px;
-            }
-        }
-
-        /* --- мобильная оптимизация для маленьких экранов --- */
-        @media (max-width: 420px) {
-            .header h1 { font-size: 22px; }
-            .grid { gap: 10px; }
-            .country-card { padding: 10px 8px 40px; border-radius: 14px; }
-            .flag { font-size: 24px; }
-            .country-name { font-size: 12px; }
-            .card-weather .temp { font-size: 16px; }
-            .card-weather .weather-icon { font-size: 14px; }
-            .card-weather .water { font-size: 10px; }
-            .detail-hero { height: 65px; }
-            .detail-content-wrapper { padding: 4px 14px 14px; }
-            .compare-bar {
-                padding: 8px 12px;
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-            .compare-bar .compare-info { font-size: 12px; }
-            .compare-bar .compare-actions button {
-                font-size: 12px;
-                padding: 4px 10px;
-            }
-            body { padding-bottom: 80px; }
-            .filters-toggle .filter-summary { display: none; }
-            .detail-actions button {
-                font-size: 12px;
-                padding: 5px 12px;
-            }
-            .detail-hero .hero-overlay .hero-name { font-size: 15px; }
-            .detail-hero .hero-overlay .hero-sub { font-size: 10px; }
-            .detail-hero .hero-overlay .hero-flag { font-size: 18px; }
-            .search-container .clear-btn {
-                right: 10px;
-                width: 20px;
-                height: 20px;
-                font-size: 14px;
-            }
-            .compare-checkbox {
-                bottom: 8px;
-                right: 8px;
-                width: 26px;
-                height: 26px;
-                font-size: 13px;
-            }
-        }
         @media (max-width: 480px) {
-            .compare-grid { grid-template-columns: 1fr; }
-            .compare-bar .compare-info .selected-chips { flex-wrap: wrap; }
-            .detail-info-grid { grid-template-columns: 1fr; }
-            .detail-temp-grid {
-                grid-template-columns: repeat(6, 1fr);
-                gap: 1px;
-            }
-            .detail-temp-grid .deg { font-size: 13px; }
-        }
-        @media (min-width: 600px) {
-            .grid { gap: 14px; }
-        }
-
-        /* ===== НОВЫЕ СТИЛИ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ (до 767px) ===== */
-        @media (max-width: 767px) {
-            /* Располагаем месяц и поиск в одной строке */
+            body { padding: 16px 12px 110px; }
+            .brand { font-size: 2rem; }
+            .brand-tagline { font-size: 0.88rem; }
             .top-row {
-                flex-direction: row;
+                display: flex;
                 flex-wrap: wrap;
                 align-items: center;
                 gap: 8px;
@@ -2005,13 +1818,11 @@
                 flex: 1 1 45%;
                 min-width: 0;
                 margin-bottom: 0;
-                padding: 4px 8px 4px 12px;
+                padding: 4px 8px 4px 10px;
                 height: 44px;
                 box-sizing: border-box;
             }
-            .top-row .month-selector label {
-                font-size: 13px;
-            }
+            .top-row .month-selector label { font-size: 12px; }
             .top-row .month-selector select {
                 padding: 6px 28px 6px 8px;
                 font-size: 13px;
@@ -2032,7 +1843,7 @@
             }
             .top-row .filters-wrapper {
                 flex: 1 1 100%;
-                margin-bottom: 4px;
+                margin-bottom: 0;
             }
             .top-row .filters-toggle {
                 height: 44px;
@@ -2040,97 +1851,103 @@
                 padding: 0 12px;
             }
             .top-row .filters-toggle .filter-summary {
-                display: none; /* скрываем на очень маленьких экранах */
+                display: none;
             }
-            /* Для маленьких экранов можно оставить только иконку фильтра */
-            .top-row .filters-toggle span:first-child {
-                font-size: 13px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
-            /* Остальные стили оставляем без изменений */
         }
     </style>
 </head>
 <body>
     <div class="app" id="app">
-        <div class="header">
+        <header class="header">
             <div class="header-top">
-                <h1>В отпуск! <span id="countBadge">0</span></h1>
+                <div class="brand-block">
+                    <h1 class="brand">В отпуск!<span class="brand-mark" aria-hidden="true"></span></h1>
+                    <p class="brand-tagline">Куда поехать — по погоде, визе и бюджету</p>
+                </div>
                 <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle" data-tooltip="Сменить тему">🌙</button>
+                    <span class="count-badge" id="countBadge">0</span>
+                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему" data-tooltip="Сменить тему"></button>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <!-- верхняя строка: дата, поиск, фильтры -->
         <div class="top-row">
             <div class="month-selector">
-                <label for="monthSelect">📆</label>
+                <label for="monthSelect">Месяц</label>
                 <select id="monthSelect"></select>
             </div>
 
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="🔍 Поиск страны..." />
-                <button class="clear-btn" id="searchClearBtn">✕</button>
+                <input type="text" id="searchInput" placeholder="Страна или город…" />
+                <button class="clear-btn" id="searchClearBtn" type="button" aria-label="Очистить">✕</button>
             </div>
 
             <div class="filters-wrapper">
                 <div class="filters-toggle" id="filtersToggle">
-                    <span>⚙️ Фильтры</span>
+                    <span>Фильтры</span>
                     <span class="filter-summary" id="filterSummary">Ничего не выбрано</span>
                     <span class="filter-count" id="filterCount">0</span>
                     <span class="toggle-icon" id="toggleIcon">▾</span>
                 </div>
                 <div class="filters" id="filtersContainer">
                     <div class="filter-group">
-                        <span class="filter-label">🏷️ Тип:</span>
+                        <span class="filter-label">Тип</span>
                         <div class="filter-options" id="typeFilters">
-                            <label data-value="family"><span class="checkmark">✅</span> Семья</label>
-                            <label data-value="romantic"><span class="checkmark">✅</span> Романтика</label>
-                            <label data-value="wellness"><span class="checkmark">✅</span> Велнес</label>
-                            <label data-value="party"><span class="checkmark">✅</span> Тусовки</label>
-                            <label data-value="ski"><span class="checkmark">✅</span> Лыжи</label>
-                            <label data-value="yacht"><span class="checkmark">✅</span> Яхтинг</label>
-                            <label data-value="culture"><span class="checkmark">✅</span> Культура</label>
-                            <label data-value="beach"><span class="checkmark">✅</span> Пляж</label>
-                            <label data-value="shopping"><span class="checkmark">✅</span> Шоппинг</label>
+                            <label data-value="family"><span class="checkmark"></span>Семья</label>
+                            <label data-value="romantic"><span class="checkmark"></span>Романтика</label>
+                            <label data-value="wellness"><span class="checkmark"></span>Велнес</label>
+                            <label data-value="party"><span class="checkmark"></span>Тусовки</label>
+                            <label data-value="ski"><span class="checkmark"></span>Лыжи</label>
+                            <label data-value="yacht"><span class="checkmark"></span>Яхтинг</label>
+                            <label data-value="culture"><span class="checkmark"></span>Культура</label>
+                            <label data-value="beach"><span class="checkmark"></span>Пляж</label>
+                            <label data-value="shopping"><span class="checkmark"></span>Шоппинг</label>
                         </div>
                     </div>
                     <div class="filter-group">
-                        <span class="filter-label">✈️ Перелёт:</span>
+                        <span class="filter-label">Перелёт</span>
                         <div class="filter-options" id="flightFilters">
-                            <label data-value="short"><span class="checkmark">✅</span> До 4ч</label>
-                            <label data-value="medium"><span class="checkmark">✅</span> 4-7ч</label>
-                            <label data-value="long"><span class="checkmark">✅</span> 8+ч</label>
+                            <label data-value="short"><span class="checkmark"></span>До 4ч</label>
+                            <label data-value="medium"><span class="checkmark"></span>4–7ч</label>
+                            <label data-value="long"><span class="checkmark"></span>8+ч</label>
                         </div>
                     </div>
                     <div class="filter-group">
-                        <span class="filter-label">💰 Бюджет:</span>
+                        <span class="filter-label">Бюджет</span>
                         <div class="filter-options" id="budgetFilters">
-                            <label data-value="low"><span class="checkmark">✅</span> Низкий</label>
-                            <label data-value="medium"><span class="checkmark">✅</span> Средний</label>
-                            <label data-value="high"><span class="checkmark">✅</span> Высокий</label>
+                            <label data-value="low"><span class="checkmark"></span>Низкий</label>
+                            <label data-value="medium"><span class="checkmark"></span>Средний</label>
+                            <label data-value="high"><span class="checkmark"></span>Высокий</label>
                         </div>
                     </div>
                     <div class="filter-group">
-                        <span class="filter-label">🛂 Виза:</span>
+                        <span class="filter-label">Виза</span>
                         <div class="filter-options" id="visaFilters">
-                            <label data-value="Не нужна"><span class="checkmark">✅</span> Без</label>
-                            <label data-value="Электронная"><span class="checkmark">✅</span> E-Visa</label>
-                            <label data-value="Шенген"><span class="checkmark">✅</span> Шенген</label>
-                            <label data-value="Виза"><span class="checkmark">✅</span> Виза</label>
-                            <label data-value="По прибытии"><span class="checkmark">✅</span> По прил.</label>
+                            <label data-value="Не нужна"><span class="checkmark"></span>Без</label>
+                            <label data-value="Электронная"><span class="checkmark"></span>E-Visa</label>
+                            <label data-value="Шенген"><span class="checkmark"></span>Шенген</label>
+                            <label data-value="Виза"><span class="checkmark"></span>Виза</label>
+                            <label data-value="По прибытии"><span class="checkmark"></span>По прил.</label>
                         </div>
                     </div>
                     <div class="filter-group">
-                        <span class="filter-label">😎 Комфорт:</span>
+                        <span class="filter-label">Комфорт</span>
                         <div class="filter-options" id="comfortFilters">
-                            <label data-value="perfect"><span class="checkmark">✅</span> Идеально</label>
-                            <label data-value="good"><span class="checkmark">✅</span> Хорошо</label>
-                            <label data-value="ok"><span class="checkmark">✅</span> Норм</label>
-                            <label data-value="bad"><span class="checkmark">✅</span> Не комфортно</label>
+                            <label data-value="perfect"><span class="checkmark"></span>Идеально</label>
+                            <label data-value="good"><span class="checkmark"></span>Хорошо</label>
+                            <label data-value="ok"><span class="checkmark"></span>Норм</label>
+                            <label data-value="bad"><span class="checkmark"></span>Не комфортно</label>
                         </div>
                     </div>
-                    <span class="filter-reset" id="filterReset">✕ Сбросить</span>
+                    <span class="filter-reset" id="filterReset">Сбросить</span>
                 </div>
             </div>
         </div>
@@ -2139,25 +1956,25 @@
     </div>
 
     <div class="compare-hint" id="compareHint">
-        💡 Выберите <span class="highlight">вторую страну</span> для сравнения
+        Выберите <span class="highlight">вторую страну</span> для сравнения
     </div>
 
     <div class="compare-bar" id="compareBar">
         <div class="compare-info">
-            <span>📋 <span class="count" id="compareCount">0</span></span>
+            <span><span class="count" id="compareCount">0</span></span>
             <div class="selected-chips" id="selectedChips"></div>
         </div>
         <div class="compare-actions">
-            <button class="clear-btn" id="clearCompare">✕</button>
-            <button class="compare-btn" id="compareBtn" disabled>Сравнить →</button>
+            <button class="clear-btn" id="clearCompare" type="button" aria-label="Очистить">✕</button>
+            <button class="compare-btn" id="compareBtn" type="button" disabled>Сравнить</button>
         </div>
     </div>
 
     <div class="compare-overlay" id="compareOverlay">
         <div class="compare-modal">
             <div class="modal-header">
-                <h2>📊 Сравнение направлений</h2>
-                <button class="modal-close" id="compareClose">✕</button>
+                <h2>Сравнение</h2>
+                <button class="modal-close" id="compareClose" type="button" aria-label="Закрыть">✕</button>
             </div>
             <div id="compareContent"></div>
         </div>
@@ -2167,8 +1984,8 @@
         <div class="detail-card" id="detailCard">
             <div id="detailContent"></div>
             <div class="detail-actions">
-                <button class="add-compare-btn" id="addCompareBtn">➕ Добавить к сравнению</button>
-                <button class="compare-from-detail" id="compareFromDetailBtn">📊 Сравнить →</button>
+                <button class="add-compare-btn" id="addCompareBtn" type="button">В сравнение</button>
+                <button class="compare-from-detail" id="compareFromDetailBtn" type="button">Сравнить</button>
             </div>
         </div>
     </div>
@@ -2176,8 +1993,8 @@
     <div class="plug-modal-overlay" id="plugModalOverlay">
         <div class="plug-modal">
             <div class="plug-modal-header">
-                <h3 id="plugModalTitle">🔌 Тип розетки</h3>
-                <button class="plug-modal-close" id="plugModalClose">✕</button>
+                <h3 id="plugModalTitle">Тип розетки</h3>
+                <button class="plug-modal-close" id="plugModalClose" type="button" aria-label="Закрыть">✕</button>
             </div>
             <div class="plug-type-display">
                 <div class="plug-svg-container" id="plugSvgContainer"></div>
@@ -2185,7 +2002,7 @@
                 <div class="plug-type-desc" id="plugTypeDesc">Описание типа розетки</div>
             </div>
             <div class="plug-countries">
-                <div class="pc-label">🌍 Страны с этим типом:</div>
+                <div class="pc-label">Страны с этим типом</div>
                 <div class="pc-list" id="plugCountriesList"></div>
             </div>
         </div>
@@ -4182,13 +3999,12 @@
             }
 
             function getComfortLabel(level) {
-                const map = { perfect: '🌟 Идеально', good: '👍 Хорошо', ok: '😐 Норм', bad: '🥵 Не комфортно' };
+                const map = { perfect: 'Идеально', good: 'Хорошо', ok: 'Норм', bad: 'Не комфортно' };
                 return map[level] || level;
             }
 
             function getComfortEmoji(level) {
-                const map = { perfect: '🌟', good: '😊', ok: '😐', bad: '😰' };
-                return map[level] || '😐';
+                return '';
             }
 
             function getCloudForMonth(c, monthIndex) {
@@ -4200,10 +4016,10 @@
             }
 
             function getCloudLabel(cloud) {
-                if (cloud <= 20) return '☀️ Ясно';
-                if (cloud <= 40) return '🌤️ Малооблачно';
-                if (cloud <= 60) return '⛅ Переменная';
-                return '☁️ Облачно';
+                if (cloud <= 20) return 'Ясно';
+                if (cloud <= 40) return 'Малооблачно';
+                if (cloud <= 60) return 'Переменная';
+                return 'Облачно';
             }
 
             function calculateBudget(c, days, people) {
@@ -4423,7 +4239,7 @@
             function applyTheme(dark) {
                 isDarkTheme = dark;
                 document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-                themeToggle.textContent = dark ? '☀️' : '🌙';
+                if (themeToggle) themeToggle.setAttribute('aria-label', dark ? 'Включить светлую тему' : 'Включить тёмную тему');
                 localStorage.setItem('theme', dark ? 'dark' : 'light');
             }
 
@@ -4454,7 +4270,7 @@
                 const mainType = codes[0];
                 const plugInfo = plugTypes[mainType];
                 if (plugInfo) {
-                    plugModalTitle.textContent = `🔌 ${plugInfo.name}`;
+                    plugModalTitle.textContent = plugInfo.name;
                     plugSvgContainer.innerHTML = getPlugSVG(mainType);
                     plugTypeName.textContent = plugInfo.name;
                     plugTypeDesc.textContent = plugInfo.description || 'Описание отсутствует';
@@ -4467,7 +4283,7 @@
                         plugCountriesList.innerHTML = '<span style="color:var(--text-secondary);">Нет данных</span>';
                     }
                 } else {
-                    plugModalTitle.textContent = `🔌 Тип ${mainType}`;
+                    plugModalTitle.textContent = `Тип ${mainType}`;
                     plugSvgContainer.innerHTML = getPlugSVG(mainType);
                     plugTypeName.textContent = `Тип ${mainType}`;
                     plugTypeDesc.textContent = 'Информация о типе розетки отсутствует. Рекомендуем уточнить перед поездкой.';
@@ -4586,7 +4402,7 @@
             // ===== РЕНДЕР =====
             function render(monthIndex) {
                 if (isNaN(monthIndex) || monthIndex < 0 || monthIndex > 11) {
-                    if (grid) grid.innerHTML = `<div class="empty-state">❌ Ошибка: неверный месяц</div>`;
+                    if (grid) grid.innerHTML = `<div class="empty-state">Ошибка: неверный месяц</div>`;
                     return;
                 }
 
@@ -4598,9 +4414,9 @@
                     if (grid) {
                         grid.innerHTML = `
                             <div class="empty-state">
-                                😕 Ничего не найдено
+                                Ничего не найдено
                                 <span>Попробуйте изменить фильтры</span>
-                                <button class="reset-empty-btn" id="resetEmptyBtn">⟲ Сбросить фильтры</button>
+                                <button class="reset-empty-btn" id="resetEmptyBtn">Сбросить фильтры</button>
                             </div>
                         `;
                         const resetBtn = document.getElementById('resetEmptyBtn');
@@ -4661,15 +4477,15 @@
 
                 let rainBadge = '';
                 if (rainy) {
-                    rainBadge = `<span class="rain-badge">🌧️ дожди</span>`;
+                    rainBadge = `<span class="rain-badge">дожди</span>`;
                 }
 
                 weather.innerHTML = `
                     <span class="temp">${temp}<sup>°</sup></span>
                     <span class="weather-icon">${icon}</span>
-                    <span class="water">🌊 ${waterTemp}°</span>
+                    <span class="water">вода ${waterTemp}°</span>
                     ${rainBadge}
-                    <span class="comfort-badge ${comfort}">${comfortEmoji} ${comfortLabel}</span>
+                    <span class="comfort-badge ${comfort}">${comfortLabel}</span>
                 `;
 
                 card.appendChild(colorBar);
@@ -4729,7 +4545,7 @@
                 if (!currentDetailId) return;
                 const isSelected = compareList.includes(currentDetailId);
                 if (addCompareBtn) {
-                    addCompareBtn.textContent = isSelected ? '✓ В сравнении' : '➕ Добавить к сравнению';
+                    addCompareBtn.textContent = isSelected ? 'В сравнении' : 'В сравнение';
                     addCompareBtn.classList.toggle('added', isSelected);
                 }
                 if (compareFromDetailBtn) {
@@ -4761,9 +4577,9 @@
                 const festivals = extras.festivals || [];
                 const visaData = extras.visa || { difficulty: 'medium', time: '7-14', notes: 'Уточните' };
                 const visaDifficultyMap = {
-                    easy: { label: '🟢 Лёгкая', class: 'easy' },
-                    medium: { label: '🟡 Средняя', class: 'medium' },
-                    hard: { label: '🔴 Сложная', class: 'hard' }
+                    easy: { label: 'Лёгкая', class: 'easy' },
+                    medium: { label: 'Средняя', class: 'medium' },
+                    hard: { label: 'Сложная', class: 'hard' }
                 };
                 const visaDiff = visaDifficultyMap[visaData.difficulty] || visaDifficultyMap.medium;
 
@@ -4781,10 +4597,10 @@
                 monthNames.forEach((m, i) => {
                     const ico = getWeatherIcon(c.temps[i], c.rainSeason, i);
                     const rainNow = isRainyMonth(c.rainSeason, i);
-                    const badge = rainNow ? ' <span class="rain-badge">🌧️</span>' : '';
+                    const badge = rainNow ? ' <span class="rain-badge">дождь</span>' : '';
                     const wt = c.waterTemps[i];
                     monthGrid +=
-                        `<div><div class="month">${monthShort[i]}</div><div class="icon-sm">${ico}</div><div class="deg">${c.temps[i]}°${badge}</div><div style="font-size:10px;color:var(--text-secondary);">🌊${wt}°</div></div>`;
+                        `<div><div class="month">${monthShort[i]}</div><div class="icon-sm">${ico}</div><div class="deg">${c.temps[i]}°${badge}</div><div style="font-size:10px;color:var(--text-secondary);">${wt}°</div></div>`;
                 });
                 monthGrid += '</div>';
 
@@ -4792,9 +4608,7 @@
                 let plugTagsHtml = '';
                 plugCodes.forEach(code => {
                     plugTagsHtml += `
-                        <span class="plug-tag" data-plug="${code}">
-                            <span class="plug-icon">🔌</span> ${code}
-                        </span>
+                        <span class="plug-tag" data-plug="${code}">${code}</span>
                     `;
                 });
 
@@ -4848,19 +4662,19 @@
                 let sightsFestivalsTipsHtml = `
                     <div class="sights-festivals-tips-block">
                         ${c.sights && c.sights.length > 0 ? `
-                            <div class="section-title">🏛️ Достопримечательности</div>
+                            <div class="section-title">Достопримечательности</div>
                             <div class="sights-list">
                                 ${c.sights.map(s => `<span class="sight-item">${s}</span>`).join('')}
                             </div>
                         ` : ''}
                         ${festivals.length > 0 ? `
-                            <div class="section-title">🎉 Фестивали и события</div>
+                            <div class="section-title">Фестивали и события</div>
                             <div>
                                 ${festivals.map(f => `<span class="festival-badge">${f}</span>`).join('')}
                             </div>
                         ` : ''}
                         ${countryTip ? `
-                            <div class="section-title">💡 Совет путешественнику</div>
+                            <div class="section-title">Совет путешественнику</div>
                             <div class="tip-text">${countryTip}</div>
                         ` : ''}
                     </div>
@@ -4868,7 +4682,7 @@
 
                 let checklistHtml = `
                     <div class="checklist-block">
-                        <div class="checklist-title">✅ Чек-лист перед поездкой</div>
+                        <div class="checklist-title">Чек-лист перед поездкой</div>
                         ${checklist.map(item => `
                             <div class="checklist-item">
                                 <span class="check-icon">${item.icon}</span>
@@ -4882,7 +4696,7 @@
                 const visaBlockHtml = `
                     <div class="detail-block">
                         <div class="detail-section-header">
-                            🛂 Виза 
+                            Виза
                             <span class="visa-header-tag">${c.visa}</span>
                         </div>
                         <div class="row"><span class="label">Сложность</span><span class="value"><span class="visa-difficulty ${visaDiff.class}">${visaDiff.label}</span></span></div>
@@ -4894,13 +4708,13 @@
 
                 let recommendText = '';
                 if (comfort === 'perfect') recommendText =
-                    `🌟 Идеальные условия для отдыха в ${monthGen}!`;
+                    `Идеальные условия для отдыха в ${monthGen}.`;
                 else if (comfort === 'good') recommendText =
-                    `😊 Хорошие условия в ${monthGen}, комфортно отдыхать.`;
+                    `Хорошие условия в ${monthGen}, комфортно отдыхать.`;
                 else if (comfort === 'ok') recommendText =
-                    `😐 В ${monthGen} условия терпимые, но могут быть нюансы.`;
+                    `В ${monthGen} условия терпимые, но могут быть нюансы.`;
                 else recommendText =
-                    `😰 В ${monthGen} не самый комфортный сезон для этой страны.`;
+                    `В ${monthGen} не самый комфортный сезон для этой страны.`;
                 if (rainy) recommendText += ` Учтите, что в ${monthGen} сезон дождей.`;
 
                 const seasonLabel = `Сезон в ${monthGen}`;
@@ -4919,8 +4733,8 @@
                             <div class="hero-sub">
                                 <span>${c.city}</span>
                                 <span class="hero-temp">${icon} ${temp}°</span>
-                                <span class="hero-temp">🌊 ${waterTemp}°</span>
-                                <span class="hero-temp">${comfortEmoji} ${comfortLabel}</span>
+                                <span class="hero-temp">вода ${waterTemp}°</span>
+                                <span class="hero-temp">${comfortLabel}</span>
                             </div>
                         </div>
                         <button class="detail-close" id="detailCloseInternal">✕</button>
@@ -4933,28 +4747,28 @@
                         <div class="col-1">
                             <div class="detail-block">
                                 <div class="row"><span class="label">${seasonLabel}</span><span class="value"><span class="season-tag ${season}">${seasonLabels[season]}</span></span></div>
-                                <div class="row"><span class="label">☁️ Облачность</span><span class="value">${cloud}% ${cloudLabel}</span></div>
-                                <div class="row"><span class="label">🌡️ Комфорт</span><span class="value">${comfortEmoji} ${comfortLabel}</span></div>
+                                <div class="row"><span class="label">Облачность</span><span class="value">${cloud}% ${cloudLabel}</span></div>
+                                <div class="row"><span class="label">Комфорт</span><span class="value">${comfortLabel}</span></div>
                                 <div class="flight-info-compact">
-                                    <span class="flight-label">✈️ Перелёт</span>
+                                    <span class="flight-label">Перелёт</span>
                                     <span class="flight-value">${flightLabels[c.flightDuration] || c.flightDuration} · ${c.flightPrice} $</span>
                                 </div>
-                                <div class="row" style="border-bottom: none; padding-bottom: 0;"><span class="label">🏷️ Тип отдыха</span><span class="value" style="font-size:13px;"><div class="type-badges-row">${typeBadgesHtml}</div></span></div>
+                                <div class="row" style="border-bottom: none; padding-bottom: 0;"><span class="label">Тип отдыха</span><span class="value" style="font-size:13px;"><div class="type-badges-row">${typeBadgesHtml}</div></span></div>
                             </div>
                             ${visaBlockHtml}
                             <div class="detail-block">
-                                <div class="detail-section-header">📋 О стране</div>
+                                <div class="detail-section-header">О стране</div>
                                 ${infoHtml}
                             </div>
                         </div>
                         <div class="col-2">
                             ${sightsFestivalsTipsHtml}
                             <div class="detail-block">
-                                <div class="detail-section-header">📆 Температура по месяцам</div>
+                                <div class="detail-section-header">Температура по месяцам</div>
                                 ${monthGrid}
                             </div>
                             <div class="rain-details-block">
-                                <div class="row"><span class="label">🌧️ Период дождей</span><span class="value ${rainy ? 'rainy' : ''}">${rainDisplay}</span></div>
+                                <div class="row"><span class="label">Период дождей</span><span class="value ${rainy ? 'rainy' : ''}">${rainDisplay}</span></div>
                                 ${c.rainDetails ? `<div class="rain-description">${c.rainDetails}</div>` : ''}
                             </div>
                             <div class="recommend">${recommendText}</div>
@@ -4962,8 +4776,8 @@
                         <div class="col-3">
                             <div class="budget-calculator">
                                 <div class="budget-header">
-                                    <span class="budget-title">💰 Бюджет</span>
-                                    <span class="budget-people">👥 ${budgetPeople} чел · ${budgetDays} дней</span>
+                                    <span class="budget-title">Бюджет</span>
+                                    <span class="budget-people">${budgetPeople} чел · ${budgetDays} дней</span>
                                 </div>
                                 <div class="budget-days-selector">
                                     <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7</button>
@@ -4971,23 +4785,22 @@
                                     <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14</button>
                                     <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21</button>
                                 </div>
-                                <div class="budget-row"><span class="budget-label">✈️ Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row"><span class="budget-label">🚕 Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row"><span class="budget-label">🏨 Отель</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row"><span class="budget-label">🍽️ Питание</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
+                                <div class="budget-row"><span class="budget-label">Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
+                                <div class="budget-row"><span class="budget-label">Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
+                                <div class="budget-row"><span class="budget-label">Отель</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
+                                <div class="budget-row"><span class="budget-label">Питание</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
                                 <div class="budget-row" style="border-bottom:2px solid var(--accent);padding-bottom:6px;">
-                                    <span class="budget-label">💎 Итого</span>
+                                    <span class="budget-label">Итого</span>
                                     <span class="budget-total">${budgetTotal.toLocaleString()} ₽</span>
                                 </div>
                                 <div class="budget-note">Расчёт примерный, включает перелёт на 2 человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на 2 человек.</div>
                                 <div class="trip-partner">
                                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                                        <span style="font-size:18px;">✈️</span>
-                                        <span style="font-weight:600;color:var(--text);">Trip.com</span>
+                                        <span style="font-weight:700;color:var(--text);">Trip.com</span>
                                     </div>
                                     <div class="trip-partner-text">Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР. Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!</div>
                                     <a href="https://ru.trip.com/sale/4283/referee.html?locale=ru-RU&referCode=FFMMN7" 
-                                       target="_blank" rel="noopener noreferrer" class="trip-link">🎁 Получить подарок</a>
+                                       target="_blank" rel="noopener noreferrer" class="trip-link">Получить подарок</a>
                                 </div>
                             </div>
                             ${checklistHtml}
@@ -4997,24 +4810,24 @@
                     detailHTML += `
                         <div class="detail-block">
                             <div class="row"><span class="label">${seasonLabel}</span><span class="value"><span class="season-tag ${season}">${seasonLabels[season]}</span></span></div>
-                            <div class="row"><span class="label">☁️ Облачность</span><span class="value">${cloud}% ${cloudLabel}</span></div>
-                            <div class="row"><span class="label">🌡️ Комфорт</span><span class="value">${comfortEmoji} ${comfortLabel}</span></div>
+                            <div class="row"><span class="label">Облачность</span><span class="value">${cloud}% ${cloudLabel}</span></div>
+                            <div class="row"><span class="label">Комфорт</span><span class="value">${comfortLabel}</span></div>
                             <div class="flight-info-compact">
-                                <span class="flight-label">✈️ Перелёт</span>
+                                <span class="flight-label">Перелёт</span>
                                 <span class="flight-value">${flightLabels[c.flightDuration] || c.flightDuration} · ${c.flightPrice} $</span>
                             </div>
-                            <div class="row" style="border-bottom: none; padding-bottom: 0;"><span class="label">🏷️ Тип отдыха</span><span class="value" style="font-size:13px;"><div class="type-badges-row">${typeBadgesHtml}</div></span></div>
+                            <div class="row" style="border-bottom: none; padding-bottom: 0;"><span class="label">Тип отдыха</span><span class="value" style="font-size:13px;"><div class="type-badges-row">${typeBadgesHtml}</div></span></div>
                         </div>
                         ${visaBlockHtml}
                         <div class="detail-block">
-                            <div class="detail-section-header">📋 О стране</div>
+                            <div class="detail-section-header">О стране</div>
                             ${infoHtml}
                         </div>
                         ${sightsFestivalsTipsHtml}
                         <div class="budget-calculator">
                             <div class="budget-header">
-                                <span class="budget-title">💰 Бюджет на поездку</span>
-                                <span class="budget-people">👥 ${budgetPeople} чел · ${budgetDays} дней</span>
+                                <span class="budget-title">Бюджет на поездку</span>
+                                <span class="budget-people">${budgetPeople} чел · ${budgetDays} дней</span>
                             </div>
                             <div class="budget-days-selector">
                                 <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7 дней</button>
@@ -5022,34 +4835,33 @@
                                 <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14 дней</button>
                                 <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21 день</button>
                             </div>
-                            <div class="budget-row"><span class="budget-label">✈️ Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row"><span class="budget-label">🚕 Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row"><span class="budget-label">🏨 Отель (1 ночь)</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row"><span class="budget-label">🍽️ Питание (в день)</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
+                            <div class="budget-row"><span class="budget-label">Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
+                            <div class="budget-row"><span class="budget-label">Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
+                            <div class="budget-row"><span class="budget-label">Отель (1 ночь)</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
+                            <div class="budget-row"><span class="budget-label">Питание (в день)</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
                             <div class="budget-row" style="border-bottom:2px solid var(--accent);padding-bottom:6px;">
-                                <span class="budget-label">💎 Итого на ${budgetDays} дней</span>
+                                <span class="budget-label">Итого на ${budgetDays} дней</span>
                                 <span class="budget-total">${budgetTotal.toLocaleString()} ₽</span>
                             </div>
                             <div class="budget-note">Расчёт примерный, включает перелёт на 2 человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на 2 человек.</div>
                             <div class="trip-partner">
                                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                                    <span style="font-size:18px;">✈️</span>
-                                    <span style="font-weight:600;color:var(--text);">Trip.com — выгодные билеты и отели</span>
+                                    <span style="font-weight:700;color:var(--text);">Trip.com — выгодные билеты и отели</span>
                                 </div>
                                 <div style="font-size:12px;line-height:1.6;">
                                     Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР.
                                     Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!
                                 </div>
                                 <a href="https://ru.trip.com/sale/4283/referee.html?locale=ru-RU&referCode=FFMMN7" 
-                                   target="_blank" rel="noopener noreferrer" class="trip-link">🎁 Получить подарок</a>
+                                   target="_blank" rel="noopener noreferrer" class="trip-link">Получить подарок</a>
                             </div>
                         </div>
                         <div class="detail-block">
-                            <div class="detail-section-header">📆 Температура по месяцам</div>
+                            <div class="detail-section-header">Температура по месяцам</div>
                             ${monthGrid}
                         </div>
                         <div class="rain-details-block">
-                            <div class="row"><span class="label">🌧️ Период дождей</span><span class="value ${rainy ? 'rainy' : ''}">${rainDisplay}</span></div>
+                            <div class="row"><span class="label">Период дождей</span><span class="value ${rainy ? 'rainy' : ''}">${rainDisplay}</span></div>
                             ${c.rainDetails ? `<div class="rain-description">${c.rainDetails}</div>` : ''}
                         </div>
                         <div class="recommend">${recommendText}</div>
@@ -5284,18 +5096,18 @@
                             <div class="ci-flag">${c.flag}</div>
                             <div class="ci-name">${c.name}</div>
                             <div class="ci-city">${c.city}</div>
-                            <div class="ci-row"><span class="ci-label">🌡️ Воздух</span><span class="ci-value">${temp}°C ${icon}</span></div>
-                            <div class="ci-row"><span class="ci-label">🌊 Вода</span><span class="ci-value">${waterTemp}°C</span></div>
-                            <div class="ci-row"><span class="ci-label">☁️ Облачность</span><span class="ci-value">${cloud}% ${cloudLabel}</span></div>
-                            <div class="ci-row"><span class="ci-label">😎 Комфорт</span><span class="ci-value">${comfortEmoji} ${comfortLabel}</span></div>
-                            <div class="ci-row"><span class="ci-label">💧 Дожди</span><span class="ci-value ${rainy ? 'rainy' : ''}">${c.rainSeason}</span></div>
-                            <div class="ci-row"><span class="ci-label">🏨 Сезон</span><span class="ci-value"><span class="season-tag ${season}">${seasonLabels[season]}</span></span></div>
-                            <div class="ci-row"><span class="ci-label">🛂 Виза</span><span class="ci-value">${c.visa}</span></div>
-                            <div class="ci-row"><span class="ci-label">💰 Валюта</span><span class="ci-value">${c.currency} (${rate} ₽)</span></div>
-                            <div class="ci-row"><span class="ci-label">💳 Бюджет (10дн)</span><span class="ci-value">${Math.round(budget.total).toLocaleString()} ₽</span></div>
-                            <div class="ci-row"><span class="ci-label">✈️ Перелёт</span><span class="ci-value">${flightLabels[c.flightDuration] || c.flightDuration}</span></div>
-                            <div class="ci-row"><span class="ci-label">✈️ Билет</span><span class="ci-value">${c.flightPrice} $</span></div>
-                            <div class="ci-row"><span class="ci-label">🔌 Розетки</span><span class="ci-value">${c.plug}</span></div>
+                            <div class="ci-row"><span class="ci-label">Воздух</span><span class="ci-value">${temp}°C ${icon}</span></div>
+                            <div class="ci-row"><span class="ci-label">Вода</span><span class="ci-value">${waterTemp}°C</span></div>
+                            <div class="ci-row"><span class="ci-label">Облачность</span><span class="ci-value">${cloud}% ${cloudLabel}</span></div>
+                            <div class="ci-row"><span class="ci-label">Комфорт</span><span class="ci-value">${comfortLabel}</span></div>
+                            <div class="ci-row"><span class="ci-label">Дожди</span><span class="ci-value ${rainy ? 'rainy' : ''}">${c.rainSeason}</span></div>
+                            <div class="ci-row"><span class="ci-label">Сезон</span><span class="ci-value"><span class="season-tag ${season}">${seasonLabels[season]}</span></span></div>
+                            <div class="ci-row"><span class="ci-label">Виза</span><span class="ci-value">${c.visa}</span></div>
+                            <div class="ci-row"><span class="ci-label">Валюта</span><span class="ci-value">${c.currency} (${rate} ₽)</span></div>
+                            <div class="ci-row"><span class="ci-label">Бюджет (10дн)</span><span class="ci-value">${Math.round(budget.total).toLocaleString()} ₽</span></div>
+                            <div class="ci-row"><span class="ci-label">Перелёт</span><span class="ci-value">${flightLabels[c.flightDuration] || c.flightDuration}</span></div>
+                            <div class="ci-row"><span class="ci-label">Билет</span><span class="ci-value">${c.flightPrice} $</span></div>
+                            <div class="ci-row"><span class="ci-label">Розетки</span><span class="ci-value">${c.plug}</span></div>
                             <div class="ci-tags">${c.typeTags.map(t => `<span class="tag">${typeLabels[t] || t}</span>`).join('')}</div>
                         </div>
                     `;
