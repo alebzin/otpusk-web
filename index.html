@@ -6,6 +6,8 @@
     <title>В отпуск!</title>
     <!-- theme-color для Android (меняется скриптом) -->
     <meta name="theme-color" content="#dff3f4" id="themeColorMeta" />
+    <meta name="msapplication-navbutton-color" content="#dff3f4" id="msNavColorMeta" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" id="appleStatusBarMeta" />
     <!-- Favicon (простая SVG-иконка) -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
     <style>
@@ -638,14 +640,10 @@
             justify-content: center;
             padding: 16px 12px 16px;
             z-index: 1000;
-            animation: fadeIn 0.25s ease;
             touch-action: none;
         }
         .detail-overlay.active { display: flex; }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        /* Убрали анимацию fadeIn для overlay, чтобы избежать мерцания */
         .detail-card {
             background: var(--bg-card);
             width: 100%;
@@ -4413,9 +4411,11 @@
                 localStorage.setItem('theme', dark ? 'dark' : 'light');
                 // Обновляем theme-color
                 const meta = document.getElementById('themeColorMeta');
+                const msMeta = document.getElementById('msNavColorMeta');
                 if (meta) {
-                    const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
-                    meta.content = bg || (dark ? '#07181d' : '#dff3f4');
+                    const bg = dark ? '#07181d' : '#dff3f4';
+                    meta.content = bg;
+                    if (msMeta) msMeta.content = bg;
                 }
             }
 
@@ -4729,7 +4729,7 @@
                 }
             }
 
-            // ===== ОТКРЫТЬ ДЕТАЛИ =====
+            // ===== ОТКРЫТЬ ДЕТАЛИ (исправлено мерцание) =====
             function openDetail(id) {
                 const c = countriesData.find(d => d.id === id);
                 if (!c) return;
@@ -5084,10 +5084,14 @@
                     });
                 }
 
-                // Убираем принудительный сброс скролла, чтобы избежать прыжков и мерцания
+                // Убираем принудительный сброс скролла, чтобы избежать мерцания
                 // Если модалка не открыта – открываем, но не трогаем скролл
                 if (!overlay.classList.contains('active')) {
-                    // Открываем без сброса скролла
+                    // Устанавливаем фон overlay сразу, чтобы избежать белого мига
+                    const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--overlay').trim();
+                    overlay.style.background = bgColor || 'rgba(8,32,38,0.45)';
+                    overlay.style.backdropFilter = 'blur(10px)';
+                    overlay.style.webkitBackdropFilter = 'blur(10px)';
                 }
 
                 updateDetailButtons();
