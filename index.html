@@ -4,12 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>В отпуск!</title>
-    <!-- theme-color для Android (меняется скриптом) -->
+    <!-- theme-color для Android (меняется скриптом), но в WebView может не работать -->
     <meta name="theme-color" content="#dff3f4" id="themeColorMeta" />
     <meta name="msapplication-navbutton-color" content="#dff3f4" id="msNavColorMeta" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" id="appleStatusBarMeta" />
     <!-- Favicon (простая SVG-иконка) -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
+    <!--
+        Для корректной смены цвета статус-бара в APK (Android WebView)
+        необходимо в манифесте приложения добавить:
+        <application ...>
+            <activity android:name=".MainActivity" android:statusBarColor="...">
+            </activity>
+        </application>
+        Или использовать плагин cordova-plugin-statusbar.
+    -->
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 
@@ -629,6 +638,8 @@
         .compare-checkbox:hover {
             transform: scale(1.04);
         }
+
+        /* Overlay – фон задаём сразу, без анимации, чтобы избежать мерцания */
         .detail-overlay {
             position: fixed;
             inset: 0;
@@ -641,9 +652,14 @@
             padding: 16px 12px 16px;
             z-index: 1000;
             touch-action: none;
+            /* убираем анимацию появления, чтобы фон не мигал */
+            transition: none;
         }
-        .detail-overlay.active { display: flex; }
-        /* Убрали анимацию fadeIn для overlay, чтобы избежать мерцания */
+        .detail-overlay.active {
+            display: flex;
+        }
+
+        /* На мобильных убираем анимацию slideUp у карточки, чтобы не было задержки */
         .detail-card {
             background: var(--bg-card);
             width: 100%;
@@ -651,18 +667,29 @@
             border-radius: var(--radius-lg) var(--radius-lg) 18px 18px;
             max-height: 88vh;
             overflow-y: auto;
-            animation: slideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
             transition: background 0.3s;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
             border: 1px solid var(--border);
             box-shadow: var(--shadow-hover);
+            /* анимация будет переопределена для десктопа */
+            animation: none;
+            opacity: 1;
+            transform: none;
         }
+
+        @media (min-width: 768px) {
+            .detail-card {
+                animation: slideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+        }
+
         @keyframes slideUp {
             0% { opacity: 0; transform: translateY(36px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+
         .detail-hero {
             position: relative;
             width: 100%;
@@ -1823,6 +1850,7 @@
                 overflow-y: auto;
                 border-radius: var(--radius-lg);
                 padding: 0;
+                animation: slideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
             }
             .detail-hero {
                 height: 84px;
