@@ -918,61 +918,72 @@
         .budget-calculator .trip-partner .trip-link:active {
             transform: scale(0.98);
         }
-        .budget-days-selector {
+
+        /* Новые стили для переключателей человек и дней в одной строке */
+        .budget-selectors {
             display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 8px;
             margin: 6px 0 8px;
         }
+        .budget-selectors .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+        .budget-people-selector,
+        .budget-days-selector {
+            display: flex;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
+        .budget-days-selector {
+            margin-left: auto;
+        }
+        .budget-people-selector button,
         .budget-days-selector button {
-            padding: 6px 12px;
-            border-radius: 10px;
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 8px;
             border: 1.5px solid var(--border);
             background: transparent;
             color: var(--text);
-            font-size: 12px;
             cursor: pointer;
             transition: all var(--transition);
             font-weight: 600;
             font-family: inherit;
+            white-space: nowrap;
         }
+        .budget-people-selector button.active,
         .budget-days-selector button.active {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
         }
+        .budget-people-selector button:active,
         .budget-days-selector button:active { transform: scale(0.97); }
+        .budget-people-selector button:hover:not(.active),
         .budget-days-selector button:hover:not(.active) {
             border-color: var(--accent);
         }
-        /* Новые стили для переключателя человек */
-        .budget-people-selector {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin: 6px 0 8px;
+
+        /* Адаптация для мобильных */
+        @media (max-width: 480px) {
+            .budget-people-selector button,
+            .budget-days-selector button {
+                padding: 4px 6px;
+                font-size: 10px;
+            }
+            .budget-selectors .divider {
+                height: 20px;
+            }
+            .budget-selectors {
+                gap: 4px;
+            }
         }
-        .budget-people-selector button {
-            padding: 4px 12px;
-            border-radius: 8px;
-            border: 1.5px solid var(--border);
-            background: transparent;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all var(--transition);
-            font-family: inherit;
-            color: var(--text);
-        }
-        .budget-people-selector button.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-        .budget-people-selector button:active { transform: scale(0.97); }
-        .budget-people-selector button:hover:not(.active) {
-            border-color: var(--accent);
-        }
+
         .detail-temp-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -4981,10 +4992,10 @@
 
                 const daysSelectorHtml = `
                     <div class="budget-days-selector">
-                        <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7 дней</button>
-                        <button data-days="10" class="${budgetDays === 10 ? 'active' : ''}">10 дней</button>
-                        <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14 дней</button>
-                        <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21 день</button>
+                        <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7 дн</button>
+                        <button data-days="10" class="${budgetDays === 10 ? 'active' : ''}">10 дн</button>
+                        <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14 дн</button>
+                        <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21 дн</button>
                     </div>
                 `;
 
@@ -4992,10 +5003,13 @@
                     <div class="budget-calculator">
                         <div class="budget-header">
                             <span class="budget-title">Бюджет</span>
-                            <span class="budget-people">${budgetPeople} чел · ${budgetDays} дней</span>
+                            <span class="budget-people">${budgetPeople} чел · ${budgetDays} дн</span>
                         </div>
-                        ${peopleSelectorHtml}
-                        ${daysSelectorHtml}
+                        <div class="budget-selectors">
+                            ${peopleSelectorHtml}
+                            <span class="divider"></span>
+                            ${daysSelectorHtml}
+                        </div>
                         <div class="budget-row"><span class="budget-label">Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
                         <div class="budget-row"><span class="budget-label">Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
                         <div class="budget-row"><span class="budget-label">Отель</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
@@ -5007,9 +5021,9 @@
                         <div class="budget-note">Расчёт примерный, включает перелёт на ${budgetPeople} человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на ${budgetPeople} человек.</div>
                         <div class="trip-partner">
                             <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                                <span style="font-weight:700;color:var(--text);">Trip.com</span>
+                                <span style="font-weight:700;color:var(--text);">Trip.com — выгодные билеты и отели</span>
                             </div>
-                            <div class="trip-partner-text">Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР. Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!</div>
+                            <div class="trip-partner-text" style="font-size:12px;line-height:1.6;color:var(--text-secondary);">Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР. Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!</div>
                             <a href="https://ru.trip.com/sale/4283/referee.html?locale=ru-RU&referCode=FFMMN7" 
                                target="_blank" rel="noopener noreferrer" class="trip-link">Получить подарок</a>
                         </div>
