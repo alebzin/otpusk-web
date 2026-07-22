@@ -4,21 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>В отпуск!</title>
-    <!-- theme-color для Android (меняется скриптом), но в WebView может не работать -->
     <meta name="theme-color" content="#dff3f4" id="themeColorMeta" />
     <meta name="msapplication-navbutton-color" content="#dff3f4" id="msNavColorMeta" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" id="appleStatusBarMeta" />
-    <!-- Favicon (простая SVG-иконка) -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
-    <!--
-        Для корректной смены цвета статус-бара в APK (Android WebView)
-        необходимо в манифесте приложения добавить:
-        <application ...>
-            <activity android:name=".MainActivity" android:statusBarColor="...">
-            </activity>
-        </application>
-        Или использовать плагин cordova-plugin-statusbar.
-    -->
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 
@@ -954,6 +943,34 @@
         }
         .budget-days-selector button:active { transform: scale(0.97); }
         .budget-days-selector button:hover:not(.active) {
+            border-color: var(--accent);
+        }
+        /* Новые стили для переключателя человек */
+        .budget-people-selector {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 6px 0 8px;
+        }
+        .budget-people-selector button {
+            padding: 4px 12px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            background: transparent;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+            color: var(--text);
+        }
+        .budget-people-selector button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .budget-people-selector button:active { transform: scale(0.97); }
+        .budget-people-selector button:hover:not(.active) {
             border-color: var(--accent);
         }
         .detail-temp-grid {
@@ -4242,11 +4259,14 @@
                         flightPrice = parseInt(c.flightPrice.trim()) || 0;
                     }
                 }
+                // flightTotal = стоимость перелёта на 2х человек * people/2? Но в текущей логике flightPrice умножается на 2 и на people. 
+                // При people=1 это даст половину от изначального (для 2х).
                 const flightTotal = flightPrice * 2 * people * usdRate;
                 
                 const hotelPriceUsd = c.hotelPrice || 100;
                 const hotelPerNight = Math.round(hotelPriceUsd * usdRate);
-                const mealForTwo = meal * 4;
+                // mealForTwo = стоимость питания на 2х человек в день. При people=1 делим пополам.
+                const mealForTwo = meal * 4 * people / 2;
                 
                 const total = flightTotal + (transfer * 2) + (hotelPerNight * days) + (mealForTwo * days);
                 
@@ -4757,7 +4777,7 @@
                 }
             }
 
-            // ===== ОТКРЫТЬ ДЕТАЛИ (исправлено мерцание) =====
+            // ===== ОТКРЫТЬ ДЕТАЛИ (исправлено мерцание и скролл) =====
             function openDetail(id) {
                 const c = countriesData.find(d => d.id === id);
                 if (!c) return;
@@ -4930,7 +4950,7 @@
 
                 const isDesktop = window.innerWidth >= 768;
 
-                // ---- ИЗМЕНЁННАЯ ШАПКА: флаг и название в одной строке ----
+                // ---- ШАПКА ----
                 let detailHTML = `
                     <div class="detail-hero">
                         <div class="hero-gradient" style="--hero-color: ${heroColor}; --hero-color-dark: ${heroColorDark};"></div>
@@ -4949,6 +4969,51 @@
                         <button class="detail-close" id="detailCloseInternal">✕</button>
                     </div>
                     <div class="detail-content-wrapper">
+                `;
+
+                // --- БЛОК БЮДЖЕТА (общий для обеих версий, но с разным расположением) ---
+                const peopleSelectorHtml = `
+                    <div class="budget-people-selector">
+                        <button data-people="1" class="${budgetPeople === 1 ? 'active' : ''}">1 чел</button>
+                        <button data-people="2" class="${budgetPeople === 2 ? 'active' : ''}">2 чел</button>
+                    </div>
+                `;
+
+                const daysSelectorHtml = `
+                    <div class="budget-days-selector">
+                        <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7 дней</button>
+                        <button data-days="10" class="${budgetDays === 10 ? 'active' : ''}">10 дней</button>
+                        <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14 дней</button>
+                        <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21 день</button>
+                    </div>
+                `;
+
+                const budgetHtml = `
+                    <div class="budget-calculator">
+                        <div class="budget-header">
+                            <span class="budget-title">Бюджет</span>
+                            <span class="budget-people">${budgetPeople} чел · ${budgetDays} дней</span>
+                        </div>
+                        ${peopleSelectorHtml}
+                        ${daysSelectorHtml}
+                        <div class="budget-row"><span class="budget-label">Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
+                        <div class="budget-row"><span class="budget-label">Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
+                        <div class="budget-row"><span class="budget-label">Отель</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
+                        <div class="budget-row"><span class="budget-label">Питание</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
+                        <div class="budget-row" style="border-bottom:2px solid var(--accent);padding-bottom:6px;">
+                            <span class="budget-label">Итого</span>
+                            <span class="budget-total">${budgetTotal.toLocaleString()} ₽</span>
+                        </div>
+                        <div class="budget-note">Расчёт примерный, включает перелёт на ${budgetPeople} человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на ${budgetPeople} человек.</div>
+                        <div class="trip-partner">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                <span style="font-weight:700;color:var(--text);">Trip.com</span>
+                            </div>
+                            <div class="trip-partner-text">Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР. Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!</div>
+                            <a href="https://ru.trip.com/sale/4283/referee.html?locale=ru-RU&referCode=FFMMN7" 
+                               target="_blank" rel="noopener noreferrer" class="trip-link">Получить подарок</a>
+                        </div>
+                    </div>
                 `;
 
                 if (isDesktop) {
@@ -4983,35 +5048,7 @@
                             <div class="recommend">${recommendText}</div>
                         </div>
                         <div class="col-3">
-                            <div class="budget-calculator">
-                                <div class="budget-header">
-                                    <span class="budget-title">Бюджет</span>
-                                    <span class="budget-people">${budgetPeople} чел · ${budgetDays} дней</span>
-                                </div>
-                                <div class="budget-days-selector">
-                                    <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7</button>
-                                    <button data-days="10" class="${budgetDays === 10 ? 'active' : ''}">10</button>
-                                    <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14</button>
-                                    <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21</button>
-                                </div>
-                                <div class="budget-row"><span class="budget-label">Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row"><span class="budget-label">Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row"><span class="budget-label">Отель</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row"><span class="budget-label">Питание</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
-                                <div class="budget-row" style="border-bottom:2px solid var(--accent);padding-bottom:6px;">
-                                    <span class="budget-label">Итого</span>
-                                    <span class="budget-total">${budgetTotal.toLocaleString()} ₽</span>
-                                </div>
-                                <div class="budget-note">Расчёт примерный, включает перелёт на 2 человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на 2 человек.</div>
-                                <div class="trip-partner">
-                                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                                        <span style="font-weight:700;color:var(--text);">Trip.com</span>
-                                    </div>
-                                    <div class="trip-partner-text">Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР. Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!</div>
-                                    <a href="https://ru.trip.com/sale/4283/referee.html?locale=ru-RU&referCode=FFMMN7" 
-                                       target="_blank" rel="noopener noreferrer" class="trip-link">Получить подарок</a>
-                                </div>
-                            </div>
+                            ${budgetHtml}
                             ${checklistHtml}
                         </div>
                     `;
@@ -5033,38 +5070,7 @@
                             ${infoHtml}
                         </div>
                         ${sightsFestivalsTipsHtml}
-                        <div class="budget-calculator">
-                            <div class="budget-header">
-                                <span class="budget-title">Бюджет на поездку</span>
-                                <span class="budget-people">${budgetPeople} чел · ${budgetDays} дней</span>
-                            </div>
-                            <div class="budget-days-selector">
-                                <button data-days="7" class="${budgetDays === 7 ? 'active' : ''}">7 дней</button>
-                                <button data-days="10" class="${budgetDays === 10 ? 'active' : ''}">10 дней</button>
-                                <button data-days="14" class="${budgetDays === 14 ? 'active' : ''}">14 дней</button>
-                                <button data-days="21" class="${budgetDays === 21 ? 'active' : ''}">21 день</button>
-                            </div>
-                            <div class="budget-row"><span class="budget-label">Перелёт</span><span class="budget-value">${budget.flightTotal ? budget.flightTotal.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row"><span class="budget-label">Трансфер</span><span class="budget-value">${budget.transfer ? budget.transfer.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row"><span class="budget-label">Отель (1 ночь)</span><span class="budget-value">${budget.hotelPerNight ? budget.hotelPerNight.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row"><span class="budget-label">Питание (в день)</span><span class="budget-value">${budget.mealForTwo ? budget.mealForTwo.toLocaleString() : '—'} ₽</span></div>
-                            <div class="budget-row" style="border-bottom:2px solid var(--accent);padding-bottom:6px;">
-                                <span class="budget-label">Итого на ${budgetDays} дней</span>
-                                <span class="budget-total">${budgetTotal.toLocaleString()} ₽</span>
-                            </div>
-                            <div class="budget-note">Расчёт примерный, включает перелёт на 2 человек, трансфер (туда и обратно), проживание в отеле 4★ и питание на 2 человек.</div>
-                            <div class="trip-partner">
-                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                                    <span style="font-weight:700;color:var(--text);">Trip.com — выгодные билеты и отели</span>
-                                </div>
-                                <div style="font-size:12px;line-height:1.6;">
-                                    Бронируйте отели и авиабилеты на Trip.com с оплатой картой МИР.
-                                    Зарегистрируйтесь по ссылке ниже и получите приветственный подарок!
-                                </div>
-                                <a href="https://ru.trip.com/sale/4283/referee.html?locale=ru-RU&referCode=FFMMN7" 
-                                   target="_blank" rel="noopener noreferrer" class="trip-link">Получить подарок</a>
-                            </div>
-                        </div>
+                        ${budgetHtml}
                         <div class="detail-block">
                             <div class="detail-section-header">Температура по месяцам</div>
                             ${monthGrid}
@@ -5088,11 +5094,26 @@
                         internalClose.addEventListener('click', closeDetail);
                     }
 
+                    // Обработчики для дней
                     detailContent.querySelectorAll('.budget-days-selector button').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const days = parseInt(this.dataset.days);
                             if (!isNaN(days)) {
                                 budgetDays = days;
+                                this.parentElement.querySelectorAll('button').forEach(b => b.classList
+                                    .remove('active'));
+                                this.classList.add('active');
+                                openDetail(currentDetailId);
+                            }
+                        });
+                    });
+
+                    // Обработчики для выбора количества человек
+                    detailContent.querySelectorAll('.budget-people-selector button').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const people = parseInt(this.dataset.people);
+                            if (!isNaN(people)) {
+                                budgetPeople = people;
                                 this.parentElement.querySelectorAll('button').forEach(b => b.classList
                                     .remove('active'));
                                 this.classList.add('active');
@@ -5112,9 +5133,9 @@
                     });
                 }
 
-                // Убираем принудительный сброс скролла, чтобы избежать мерцания
-                // Если модалка не открыта – открываем, но не трогаем скролл
-                if (!overlay.classList.contains('active')) {
+                // Сброс скролла только при первом открытии, а не при обновлении (например, смена дней)
+                const wasActive = overlay.classList.contains('active');
+                if (!wasActive) {
                     // Устанавливаем фон overlay сразу, чтобы избежать белого мига
                     const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--overlay').trim();
                     overlay.style.background = bgColor || 'rgba(8,32,38,0.45)';
@@ -5126,6 +5147,12 @@
                 if (overlay) {
                     overlay.classList.add('active');
                     document.body.style.overflow = 'hidden';
+                }
+
+                // Сброс прокрутки только если overlay не был активен (первое открытие)
+                if (!wasActive) {
+                    const card = document.getElementById('detailCard');
+                    if (card) card.scrollTop = 0;
                 }
 
                 // ===== ДОБАВЛЯЕМ ОБРАБОТЧИКИ СВАЙПА ДЛЯ МОБИЛЬНОЙ ВЕРСИИ =====
@@ -5168,11 +5195,12 @@
                 const scrollHeight = scrollEl.scrollHeight;
                 const clientHeight = scrollEl.clientHeight;
 
-                if (touchDeltaY > 80 && scrollTop === 0) {
+                // Увеличиваем порог с 80 до 160
+                if (touchDeltaY > 160 && scrollTop === 0) {
                     closeDetail();
                     return;
                 }
-                if (touchDeltaY < -80 && scrollTop + clientHeight >= scrollHeight - 2) {
+                if (touchDeltaY < -160 && scrollTop + clientHeight >= scrollHeight - 2) {
                     closeDetail();
                     return;
                 }
@@ -5286,7 +5314,7 @@
                     const comfortEmoji = getComfortEmoji(comfort);
                     const cloud = getCloudForMonth(c, monthIndex);
                     const cloudLabel = getCloudLabel(cloud);
-                    const budget = calculateBudget(c, budgetDays, 2);
+                    const budget = calculateBudget(c, budgetDays, budgetPeople);
                     const rate = getCurrencyRate(c.currency);
                     html += `
                         <div class="compare-item">
@@ -5301,7 +5329,7 @@
                             <div class="ci-row"><span class="ci-label">Сезон</span><span class="ci-value"><span class="season-tag ${season}">${seasonLabels[season]}</span></span></div>
                             <div class="ci-row"><span class="ci-label">Виза</span><span class="ci-value">${c.visa}</span></div>
                             <div class="ci-row"><span class="ci-label">Валюта</span><span class="ci-value">${c.currency} (${rate} ₽)</span></div>
-                            <div class="ci-row"><span class="ci-label">Бюджет (10дн)</span><span class="ci-value">${Math.round(budget.total).toLocaleString()} ₽</span></div>
+                            <div class="ci-row"><span class="ci-label">Бюджет (${budgetDays}дн)</span><span class="ci-value">${Math.round(budget.total).toLocaleString()} ₽</span></div>
                             <div class="ci-row"><span class="ci-label">Перелёт</span><span class="ci-value">${flightLabels[c.flightDuration] || c.flightDuration}</span></div>
                             <div class="ci-row"><span class="ci-label">Билет</span><span class="ci-value">${c.flightPrice} $</span></div>
                             <div class="ci-row"><span class="ci-label">Розетки</span><span class="ci-value">${c.plug}</span></div>
