@@ -7,7 +7,10 @@
     <meta name="theme-color" content="#dff3f4" id="themeColorMeta" />
     <meta name="msapplication-navbutton-color" content="#dff3f4" id="msNavColorMeta" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" id="appleStatusBarMeta" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
+    <!-- Манифест будет добавлен динамически -->
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 
@@ -185,7 +188,7 @@
             border-radius: 12px;
             width: 42px;
             height: 42px;
-            font-size: 0;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -194,19 +197,6 @@
             color: var(--text);
             box-shadow: var(--shadow);
             position: relative;
-        }
-        .theme-toggle::before {
-            content: "";
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--sun);
-            box-shadow: inset -6px -2px 0 0 var(--bg-card);
-            transition: var(--transition);
-        }
-        [data-theme="dark"] .theme-toggle::before {
-            box-shadow: none;
-            background: radial-gradient(circle at 35% 35%, #fff6c8, var(--sun));
         }
         .theme-toggle:active { transform: scale(0.94); }
         .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -1080,19 +1070,22 @@
             border: 1px solid var(--border);
             font-weight: 500;
         }
+        /* изменяем стили для фестивалей — делаем как .sight-item */
         .sights-festivals-tips-block .festival-badge {
             display: inline-block;
             padding: 5px 10px;
             border-radius: 10px;
-            background: var(--sun-soft);
-            color: #7a5a00;
-            font-size: 11px;
-            font-weight: 700;
+            background: var(--tag-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
             margin: 2px;
         }
         [data-theme="dark"] .sights-festivals-tips-block .festival-badge {
-            background: rgba(245, 200, 76, 0.15);
-            color: #f0d070;
+            background: var(--tag-bg);
+            color: var(--text);
+            border-color: var(--border);
         }
         .sights-festivals-tips-block .tip-text {
             font-size: 13px;
@@ -2042,6 +2035,10 @@
             .top-row .filters-toggle .filter-summary {
                 display: none;
             }
+            /* Увеличиваем padding-top для overlay на мобильных */
+            .detail-overlay {
+                padding-top: 20px;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -2062,7 +2059,9 @@
                     <p class="brand-tagline">Куда поехать — по погоде, визе и бюджету</p>
                 </div>
                 <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему"></button>
+                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему">
+                        <span id="themeIcon">☀️</span>
+                    </button>
                 </div>
             </div>
         </header>
@@ -2077,6 +2076,9 @@
                 <input type="text" id="searchInput" placeholder="Страна или город…" />
                 <button class="clear-btn" id="searchClearBtn" type="button" aria-label="Очистить">✕</button>
             </div>
+
+            <!-- count-badge перемещён перед filters-wrapper -->
+            <span class="count-badge" id="countBadge" title="Найдено направлений">0</span>
 
             <div class="filters-wrapper">
                 <div class="filters-toggle" id="filtersToggle">
@@ -2138,8 +2140,6 @@
                     <span class="filter-reset" id="filterReset">Сбросить</span>
                 </div>
             </div>
-
-            <span class="count-badge" id="countBadge" title="Найдено направлений">0</span>
         </div>
 
         <div class="grid" id="cardsGrid"></div>
@@ -2200,6 +2200,46 @@
 
     <script>
         (function() {
+            // ===== PWA MANIFEST (добавляем динамически) =====
+            function createManifest() {
+                const manifest = {
+                    name: "В отпуск!",
+                    short_name: "В отпуск",
+                    description: "Подбор страны для путешествия по погоде, визе и бюджету",
+                    start_url: window.location.href.split('?')[0],
+                    display: "standalone",
+                    background_color: "#dff3f4",
+                    theme_color: "#dff3f4",
+                    icons: [
+                        {
+                            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E",
+                            sizes: "any",
+                            type: "image/svg+xml",
+                            purpose: "maskable"
+                        },
+                        {
+                            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E",
+                            sizes: "192x192",
+                            type: "image/svg+xml",
+                            purpose: "any"
+                        },
+                        {
+                            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E",
+                            sizes: "512x512",
+                            type: "image/svg+xml",
+                            purpose: "any"
+                        }
+                    ]
+                };
+                const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('link');
+                link.rel = 'manifest';
+                link.href = url;
+                document.head.appendChild(link);
+            }
+            createManifest();
+
             // ===== ЦВЕТА =====
             const countryColors = [
                 '#E74C3C', '#3498DB', '#2ECC71', '#F39C12', '#9B59B6',
@@ -4422,6 +4462,7 @@
             const searchInput = document.getElementById('searchInput');
             const searchClearBtn = document.getElementById('searchClearBtn');
             const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
             const countBadge = document.getElementById('countBadge');
             const compareHint = document.getElementById('compareHint');
             const addCompareBtn = document.getElementById('addCompareBtn');
@@ -4466,6 +4507,10 @@
             function applyTheme(dark) {
                 isDarkTheme = dark;
                 document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+                // Обновляем иконку
+                if (themeIcon) {
+                    themeIcon.textContent = dark ? '🌙' : '☀️';
+                }
                 if (themeToggle) themeToggle.setAttribute('aria-label', dark ? 'Включить светлую тему' : 'Включить тёмную тему');
                 localStorage.setItem('theme', dark ? 'dark' : 'light');
                 // Обновляем theme-color
