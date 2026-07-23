@@ -4522,19 +4522,23 @@
             let budgetPeople = 2;
 
             // ===== АВТОМАТИЧЕСКИЙ НОЧНОЙ РЕЖИМ (системный) =====
+            // Переменная, определяющая, переопределил ли пользователь тему вручную
+            let manualThemeOverride = localStorage.getItem('manualThemeOverride') === 'true';
+
             function getSystemTheme() {
                 return window.matchMedia('(prefers-color-scheme: dark)').matches;
             }
 
-            // Применяем тему: если в localStorage есть явное предпочтение — используем его, иначе системную
+            // Применяем тему: если ручной режим включён — берём из localStorage, иначе системную
             function applyTheme(dark) {
                 isDarkTheme = dark;
                 document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-                // Обновляем иконку — меняем местами: при светлой теме показываем 🌙, при тёмной ☀️
+                // Обновляем иконку — при светлой теме показываем 🌙, при тёмной ☀️
                 if (themeIcon) {
                     themeIcon.textContent = dark ? '☀️' : '🌙';
                 }
                 if (themeToggle) themeToggle.setAttribute('aria-label', dark ? 'Включить светлую тему' : 'Включить тёмную тему');
+                // Сохраняем тему в localStorage всегда, но при загрузке учитываем флаг manualThemeOverride
                 localStorage.setItem('theme', dark ? 'dark' : 'light');
                 // Обновляем theme-color
                 const meta = document.getElementById('themeColorMeta');
@@ -4546,24 +4550,33 @@
                 }
             }
 
-            // Инициализация темы: сначала проверяем localStorage, если нет — системную
-            const storedTheme = localStorage.getItem('theme');
-            if (storedTheme !== null) {
-                applyTheme(storedTheme === 'dark');
+            // Инициализация темы: если ручной режим включён — используем сохранённую, иначе системную
+            if (manualThemeOverride) {
+                const storedTheme = localStorage.getItem('theme');
+                if (storedTheme !== null) {
+                    applyTheme(storedTheme === 'dark');
+                } else {
+                    applyTheme(getSystemTheme());
+                }
             } else {
                 applyTheme(getSystemTheme());
             }
 
-            // Следим за системной темой (если пользователь не переопределял)
+            // Следим за системной темой (только если пользователь не переопределял)
             const systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
             systemThemeMedia.addEventListener('change', (e) => {
-                if (localStorage.getItem('theme') === null) {
+                if (!manualThemeOverride) {
                     applyTheme(e.matches);
                 }
             });
 
             // Кнопка переключения темы (переопределяет системную)
             themeToggle.addEventListener('click', () => {
+                // При первом ручном переключении устанавливаем флаг manualThemeOverride = true
+                if (!manualThemeOverride) {
+                    manualThemeOverride = true;
+                    localStorage.setItem('manualThemeOverride', 'true');
+                }
                 applyTheme(!isDarkTheme);
             });
 
