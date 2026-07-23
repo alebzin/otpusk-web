@@ -2019,9 +2019,10 @@
                 padding-right: 36px;
             }
             .top-row .filters-wrapper {
-                flex: 1 1 auto;
+                flex: 0 1 auto;
                 min-width: 0;
                 margin-bottom: 0;
+                position: relative;
             }
             .top-row .count-badge {
                 height: 44px;
@@ -2031,13 +2032,42 @@
                 height: 44px;
                 font-size: 12px;
                 padding: 0 12px;
+                white-space: nowrap;
             }
             .top-row .filters-toggle .filter-summary {
                 display: none;
             }
-            /* Увеличиваем padding-top для overlay на мобильных */
+
+            /* Фильтры — absolute, чтобы не растягивать родителя */
+            .filters {
+                position: absolute;
+                top: calc(100% + 6px);
+                left: 0;
+                right: 0;
+                width: auto;
+                max-width: 100%;
+                z-index: 100;
+                background: var(--bg-card);
+                padding: 14px;
+                border-radius: var(--radius-lg);
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow-hover);
+                margin-top: 0;
+            }
+            .filters .filter-group {
+                flex-wrap: wrap;
+            }
+
+            /* Модалка — центрируем по вертикали */
             .detail-overlay {
-                padding-top: 20px;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+            }
+            .detail-card {
+                max-height: 90vh;
+                border-radius: var(--radius-lg);
+                max-width: 100%;
             }
         }
 
@@ -2125,7 +2155,7 @@
                             <label data-value="Электронная"><span class="checkmark"></span>E-Visa</label>
                             <label data-value="Шенген"><span class="checkmark"></span>Шенген</label>
                             <label data-value="Виза"><span class="checkmark"></span>Виза</label>
-                            <label data-value="По прибытии"><span class="checkmark"></span>По прил.</label>
+                            <label data-value="По прибытии"><span class="checkmark"></span>По прилёту</label>
                         </div>
                     </div>
                     <div class="filter-group">
@@ -4507,9 +4537,9 @@
             function applyTheme(dark) {
                 isDarkTheme = dark;
                 document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-                // Обновляем иконку
+                // Обновляем иконку — меняем местами: при светлой теме показываем 🌙, при тёмной ☀️
                 if (themeIcon) {
-                    themeIcon.textContent = dark ? '🌙' : '☀️';
+                    themeIcon.textContent = dark ? '☀️' : '🌙';
                 }
                 if (themeToggle) themeToggle.setAttribute('aria-label', dark ? 'Включить светлую тему' : 'Включить тёмную тему');
                 localStorage.setItem('theme', dark ? 'dark' : 'light');
