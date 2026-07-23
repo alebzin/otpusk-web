@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230e8a8a'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif'%3E☀%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
-    <!-- Манифест будет добавлен динамически -->
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 
@@ -631,14 +630,12 @@
             padding: 16px 12px 16px;
             z-index: 1000;
             touch-action: none;
-            /* убираем анимацию появления, чтобы фон не мигал */
             transition: none;
         }
         .detail-overlay.active {
             display: flex;
         }
 
-        /* На мобильных убираем анимацию slideUp у карточки, чтобы не было задержки */
         .detail-card {
             background: var(--bg-card);
             width: 100%;
@@ -652,7 +649,6 @@
             overscroll-behavior: contain;
             border: 1px solid var(--border);
             box-shadow: var(--shadow-hover);
-            /* анимация будет переопределена для десктопа */
             animation: none;
             opacity: 1;
             transform: none;
@@ -909,7 +905,6 @@
             transform: scale(0.98);
         }
 
-        /* Новые стили для переключателей человек и дней в одной строке */
         .budget-selectors {
             display: flex;
             flex-wrap: nowrap;
@@ -959,7 +954,6 @@
             border-color: var(--accent);
         }
 
-        /* Адаптация для мобильных */
         @media (max-width: 480px) {
             .budget-people-selector button,
             .budget-days-selector button {
@@ -1070,7 +1064,6 @@
             border: 1px solid var(--border);
             font-weight: 500;
         }
-        /* изменяем стили для фестивалей — делаем как .sight-item */
         .sights-festivals-tips-block .festival-badge {
             display: inline-block;
             padding: 5px 10px;
@@ -1991,9 +1984,9 @@
                 align-items: center;
                 gap: 8px;
             }
+            /* Месяц и поиск на всю ширину, каждый на своей строке */
             .top-row .month-selector {
-                flex: 1 1 45%;
-                min-width: 0;
+                flex: 0 0 100%;
                 margin-bottom: 0;
                 padding: 4px 8px 4px 10px;
                 height: 44px;
@@ -2008,7 +2001,7 @@
                 background-size: 10px;
             }
             .top-row .search-container {
-                flex: 1 1 45%;
+                flex: 0 0 100%;
                 min-width: 0;
                 margin-bottom: 0;
             }
@@ -2018,15 +2011,17 @@
                 font-size: 13px;
                 padding-right: 36px;
             }
+            /* count-badge и filters-wrapper в одной строке */
+            .top-row .count-badge {
+                flex: 0 0 auto;
+                height: 44px;
+                min-width: 44px;
+            }
             .top-row .filters-wrapper {
-                flex: 0 1 auto;
+                flex: 1 1 0;
                 min-width: 0;
                 margin-bottom: 0;
                 position: relative;
-            }
-            .top-row .count-badge {
-                height: 44px;
-                min-width: 44px;
             }
             .top-row .filters-toggle {
                 height: 44px;
@@ -2038,7 +2033,7 @@
                 display: none;
             }
 
-            /* Фильтры — absolute, чтобы не растягивать родителя */
+            /* Фильтры — absolute, занимают всю ширину родителя */
             .filters {
                 position: absolute;
                 top: calc(100% + 6px);
@@ -2058,7 +2053,7 @@
                 flex-wrap: wrap;
             }
 
-            /* Модалка — центрируем по вертикали */
+            /* Модалка — центрируем по вертикали и горизонтали */
             .detail-overlay {
                 align-items: center;
                 justify-content: center;
@@ -2068,6 +2063,7 @@
                 max-height: 90vh;
                 border-radius: var(--radius-lg);
                 max-width: 100%;
+                margin: 0 auto;
             }
         }
 
@@ -2107,7 +2103,6 @@
                 <button class="clear-btn" id="searchClearBtn" type="button" aria-label="Очистить">✕</button>
             </div>
 
-            <!-- count-badge перемещён перед filters-wrapper -->
             <span class="count-badge" id="countBadge" title="Найдено направлений">0</span>
 
             <div class="filters-wrapper">
@@ -2230,7 +2225,7 @@
 
     <script>
         (function() {
-            // ===== PWA MANIFEST (добавляем динамически) =====
+            // ===== PWA MANIFEST =====
             function createManifest() {
                 const manifest = {
                     name: "В отпуск!",
@@ -3091,7 +3086,6 @@
                     ], temps: [1, 3, 8, 15, 20, 24, 27, 27, 22, 16, 9, 3], humidity: "сухой",
                     language: "Сербский, английский", plug: "C/F", vaccines: "Нет", tips: "10%", medicine: "⭐⭐⭐",
                     shopping: "Сувениры, ракия, керамика", cuisine: "Кулинарный, плескавица, ракия" },
-                // === НОВЫЕ СТРАНЫ СНГ ===
                 { id: "russia", name: "Россия (Москва)", city: "Москва", flag: "🇷🇺", currency: "RUB",
                     visa: "Не нужна", rainSeason: "–", rainDetails: "Умеренный климат, лето комфортное.",
                     waterTemps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -3968,7 +3962,6 @@
                         { icon: '🧥', text: 'Тёплая одежда', detail: 'Зимой холодно' }
                     ]
                 },
-                // Новые страны СНГ
                 'Россия (Москва)': {
                     comfort: { jan: 'bad', feb: 'bad', mar: 'bad', apr: 'good', may: 'good', jun: 'perfect', jul: 'perfect',
                         aug: 'perfect', sep: 'good', oct: 'good', nov: 'bad', dec: 'bad' },
